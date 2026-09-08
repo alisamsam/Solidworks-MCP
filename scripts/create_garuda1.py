@@ -1,7 +1,8 @@
-"""Create a concept model of the GARUDA-1 fixed-wing VTOL drone in SolidWorks.
+"""Create a detailed concept model of the GARUDA-1 fixed-wing VTOL drone.
 
-The model is intentionally a lightweight concept model with separate solid
-bodies for the airframe components. Dimensions are in millimetres.
+The model uses separate solid bodies for the airframe components, with
+sampled aerodynamic planforms, fairings, pods, camera housings, and tail
+surfaces. Dimensions are in millimetres.
 """
 
 from __future__ import annotations
@@ -9,7 +10,7 @@ from __future__ import annotations
 import os
 import sys
 import glob
-from typing import Iterable, Sequence
+from typing import Sequence
 
 import pythoncom
 import win32com.client
@@ -55,6 +56,25 @@ def draw_circle(doc, x: float, y: float, radius: float) -> None:
     cx, cy = point(x, y)
     r = radius * MM
     doc.SketchManager.CreateCircle(cx, cy, 0, cx + r, cy, 0)
+
+
+def rounded_rectangle(x: float, y: float, length: float, width: float,
+                      corner: float, points: int = 4) -> list[tuple[float, float]]:
+    """Return a planform with sampled rounded corners."""
+    result = []
+    centers = [
+        (x + length - corner, y + width - corner, 0),
+        (x + corner, y + width - corner, 90),
+        (x + corner, y + corner, 180),
+        (x + length - corner, y + corner, 270),
+    ]
+    import math
+    for cx, cy, start in centers:
+        for step in range(points + 1):
+            angle = math.radians(start + step * 90 / points)
+            result.append((cx + corner * math.cos(angle),
+                           cy + corner * math.sin(angle)))
+    return result
 
 
 def close_and_select_last_sketch(doc) -> str:
@@ -141,6 +161,13 @@ def make_circle_body(doc, plane: str, x: float, y: float, radius: float,
     extrude(doc, thickness, merge=merge)
 
 
+def make_rounded_body(doc, plane: str, x: float, y: float, length: float,
+                      width: float, corner: float, thickness: float) -> None:
+    make_polygon_body(
+        doc, plane, rounded_rectangle(x, y, length, width, corner), thickness
+    )
+
+
 def save_and_show(doc, path: str) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     if not doc.SaveAs(path):
@@ -161,20 +188,37 @@ def create_model(output_path: str) -> None:
         raise RuntimeError("SolidWorks could not create a new part")
 
     # Main fuselage: 2600 mm long, 500 mm maximum width, 260 mm thick.
+    # The nose and aft taper are sampled with more points than a simple box,
+    # making the silhouette visibly closer to an aerodynamic shell.
     fuselage = [
-        (-1300, 0), (-1190, 145), (-920, 230), (-450, 250),
-        (250, 225), (850, 165), (1250, 85), (1300, 0),
-        (1250, -85), (850, -165), (250, -225), (-450, -250),
-        (-920, -230), (-1190, -145),
+        (-1300, 0), (-1260, 85), (-1190, 145), (-1060, 205),
+        (-820, 235), (-450, 250), (250, 225), (850, 165),
+        (1120, 115), (1250, 85), (1300, 0), (1250, -85),
+        (1120, -115), (850, -165), (250, -225), (-450, -250),
+        (-820, -235), (-1060, -205), (-1190, -145), (-1260, -85),
     ]
     make_polygon_body(doc, "Top Plane", fuselage, 260)
 
+    # Upper equipment fairing and rounded thermal-camera bay.
+    make_rounded_body(doc, "Top Plane", -680, -145, 1080, 290, 120, 115)
+    make_circle_body(doc, "Top Plane", -1080, 0, 125, 145)
+
     # Tapered main wings: 5 m total span and moderate sweep.
-    right_wing = [(0, 220), (470, 245), (420, 2500), (80, 2500),
-                  (-180, 900), (-260, 350)]
+    right_wing = [(-110, 220), (470, 245), (405, 2500), (275, 2520),
+                  (80, 2440), (-120, 1500), (-230, 720), (-260, 350)]
     left_wing = [(x, -y) for x, y in right_wing]
     make_polygon_body(doc, "Top Plane", right_wing, 90)
     make_polygon_body(doc, "Top Plane", left_wing, 90)
+
+    # Leading-edge root fairings and separate aileron/flap surfaces.
+    for sign in (1, -1):
+        fairing = [(-220, sign * 250), (150, sign * 285),
+                   (120, sign * 840), (-80, sign * 1220),
+                   (-250, sign * 820)]
+        flap = [(80, sign * 1460), (395, sign * 2420),
+                (305, sign * 2470), (5, sign * 1500)]
+        make_polygon_body(doc, "Top Plane", fairing, 120)
+        make_polygon_body(doc, "Top Plane", flap, 45)
 
     # Horizontal tailplane and twin end plates.
     right_tail = [(760, 60), (1200, 70), (1140, 720), (850, 660)]
@@ -185,8 +229,15 @@ def create_model(output_path: str) -> None:
     # Vertical tail on the front plane, represented by a swept fin.
     vertical_tail = [(820, 0), (1230, 0), (1160, 560), (1000, 760), (900, 520)]
     make_polygon_body(doc, "Front Plane", vertical_tail, 70)
+    # Twin winglets give the tail a more finished aerodynamic appearance.
+    make_polygon_body(
+        doc, "Front Plane",
+        [(1030, 0), (1230, 0), (1180, 390), (1100, 470), (1050, 300)],
+        55,
+    )
 
-    # Two lift motor nacelles and the rear pusher nacelle.
+    # Two lift motor nacelles and the rear pusher nacelle, each built from
+    # layered bodies to suggest a tapered pod, mount plate, and motor cap.
     make_circle_body(doc, "Top Plane", -30, 1780, 150, 300)
     make_circle_body(doc, "Top Plane", -30, -1780, 150, 300)
     make_circle_body(doc, "Top Plane", 1160, 0, 170, 240)
@@ -195,16 +246,21 @@ def create_model(output_path: str) -> None:
     make_circle_body(doc, "Top Plane", -30, 1780, 105, 340)
     make_circle_body(doc, "Top Plane", -30, -1780, 105, 340)
     make_circle_body(doc, "Top Plane", 1260, 0, 95, 280)
+    for sign in (1, -1):
+        pod_y = 1780 * sign
+        make_circle_body(doc, "Top Plane", -220, pod_y, 125, 65)
+        make_circle_body(doc, "Top Plane", 1110, 190 * sign, 85, 70)
 
     # Forward sensor blister.
     make_circle_body(doc, "Top Plane", -1080, 0, 125, 90)
+    make_circle_body(doc, "Front Plane", -1135, -45, 72, 110)
 
     save_and_show(doc, output_path)
-    print(f"Created GARUDA-1 concept model: {output_path}")
+    print(f"Created detailed GARUDA-1 concept model: {output_path}")
 
 
 if __name__ == "__main__":
     destination = sys.argv[1] if len(sys.argv) > 1 else os.path.join(
-        os.getcwd(), "GARUDA-1.sldprt"
+        os.getcwd(), "GARUDA-1-detailed.sldprt"
     )
     create_model(os.path.abspath(destination))
