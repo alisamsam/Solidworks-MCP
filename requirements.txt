@@ -5,8 +5,6 @@
 # MCP SDK
 mcp>=1.0.0
 
-# Async support
-asyncio-compat>=0.1.0
 
 # Logging and utilities
 python-dotenv>=1.0.0

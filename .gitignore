@@ -9,3 +9,5 @@ solidworks_mcp.log
 dist/
 build/
 *.egg-info/
+.venv/
+.mcp.json
