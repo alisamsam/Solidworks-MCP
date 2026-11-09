@@ -17,3 +17,10 @@ build/
 .opencode/
 .playwright-mcp/
 output/
+
+# Machine-local development artifacts
+.venv/
+.pytest_cache/
+.superpowers/
+opencode.jsonc
+solidworks_mcp/backup_*/

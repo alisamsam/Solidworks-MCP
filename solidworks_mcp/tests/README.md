@@ -15,6 +15,13 @@ already set in the calling environment. This covers schemas, dispatch, mocks,
 document/session guards, path policy, toolsets, geometry helpers and project
 contracts. Passing mocks do not establish native CAD correctness.
 
+The browser parameter-state test is separate from Python discovery. If Node.js
+is installed, run it with:
+
+```powershell
+node --test solidworks_mcp/tests/test_parameter_ui_state.cjs
+```
+
 Smaller review examples:
 
 ```powershell
@@ -38,6 +45,9 @@ Use a disposable SolidWorks session with no user work open. Review the selected
 test and `live/_scratch.py` before execution. Tests create documents, change
 selection and may save files to configured output roots. Some depend on
 templates, add-ins, standard profiles, sample models or license capabilities.
+Set `guarded_mode: true` and valid absolute `output_roots` in
+`solidworks_mcp/config.json` first. Routing tests also need the separate
+`SW_MCP_ROUTING_ENABLED=true` permission and the relevant SolidWorks add-in.
 Do not run the entire live directory blindly on a working CAD session.
 
 One focused scratch example:
