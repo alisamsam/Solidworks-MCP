@@ -50,7 +50,8 @@ class ToolsetTests(unittest.TestCase):
     def test_core_sketch_features_fit_the_small_budget(self):
         with mock.patch.dict(os.environ, {"SW_MCP_TOOLSETS": "core,sketch,features"}):
             tools = asyncio.run(server.list_tools())
-        self.assertLessEqual(catalog_bytes(tools), 48_000)
+        # 50k covers the unguarded default, where execute_python is advertised too.
+        self.assertLessEqual(catalog_bytes(tools), 50_000)
 
     def test_guarded_mode_still_hides_execute_python(self):
         with mock.patch.object(server.config, "guarded_mode", True):

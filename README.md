@@ -36,11 +36,6 @@
 
 ## 🛠️ Available Tools
 
-**Slovenska navodila za uporabnika:** [Kaj lahko naročim in kako začnem](docs/UPORABNISKI-VODIC.md)
-ter [celoten katalog s primerom za vsako orodje](docs/MCP-ORODJA-KATALOG.md).
-Prek MCP: `get_modeling_guide(topic="workflow/tools")`; nato izberi področje.
-Vodiča se preverjata proti dejanskemu registru z `python scripts/build_user_tool_guide.py --check`.
-
 The table below lists core examples, not the complete current catalog.
 Before modeling, use `get_modeling_guide(topic="index")` to select an ordered
 workflow or an expert topic. The same read-only knowledge is available at
