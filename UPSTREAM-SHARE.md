@@ -14,6 +14,7 @@ runtime modules. No private mechanical-design skill is required to run it.
 - [Examples and live demonstration safety](examples/README.md).
 - Human-facing tool examples: `scripts/user_tool_examples.txt`.
 - Shared client instructions: `solidworks_mcp/knowledge/server-instructions.txt`.
+- [Mechanical-design skill concept](MECHANICAL-SKILL-CONCEPT.md): the design approach only. Adopters must build their own complete skill; the private implementation is not included.
 
 ## Complete tool coverage
 

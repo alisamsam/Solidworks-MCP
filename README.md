@@ -6,6 +6,8 @@
 implementation and separate tests and examples. Start with the
 [author review package](UPSTREAM-SHARE.md), [test instructions](solidworks_mcp/tests/README.md)
 and [examples index](examples/README.md).
+The optional [mechanical-design skill concept](MECHANICAL-SKILL-CONCEPT.md)
+explains an approach to engineering-guided tool use, not an included skill.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
