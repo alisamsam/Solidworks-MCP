@@ -219,9 +219,16 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 **Samsaam Ali Baig**
 - GitHub: [@alisamsam](https://github.com/alisamsam)
 
-Additional development on the `additional-upgrades` branch: **PksOck**.
-This branch is being prepared as a consolidated pull request for the original
-author's review; its changes have not been merged upstream.
+Additional development by **PksOck**, originally on `additional-upgrades`
+and collected here on `upstream-share` for the original author's review.
+These changes have not been merged upstream.
+
+Not all tools have been thoroughly tested. Automated tests and selected live
+SolidWorks checks cover parts of the implementation, but do not establish that
+every tool works reliably across all supported versions, configurations and
+workflows. This remains work in progress, with room for bug fixes, broader
+testing and improvements. Review and test the tools in a disposable project
+before relying on them for production work. Feedback and contributions are welcome.
 
 ---
 
