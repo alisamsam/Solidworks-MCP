@@ -1,0 +1,4 @@
+# The standard library is generated per machine by scripts/sync_standard_library.py.
+# Keep binaries (and the generated index) out of git; rebuild with the script.
+*
+!.gitignore

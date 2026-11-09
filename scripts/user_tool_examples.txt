@@ -1,0 +1,255 @@
+# tool | primer naročila | pomembna meja ali potrebni podatki
+get_modeling_guide | Pokaži navodila za delo s pločevino. | Brez povezave s CAD; vodič ne izvede modeliranja.
+connect_solidworks | Poveži se s SolidWorksom. | Po potrebi zažene program.
+get_solidworks_info | Preveri različico SolidWorksa in stanje trenutne seje. | Podatki o seji so odvisni od povezave.
+get_capabilities | Povej, katera orodja so trenutno omogočena in katera blokirana. | To je trenutna dostopnost, ne dokaz uspešnega modeliranja.
+bind_active_document | Za nadaljnje korake uporabi ta aktivni dokument in konfiguracijo. | Preprečuje nenamerno delo na drugem aktivnem dokumentu.
+set_units | Za mere uporabljaj milimetre. | Agent še vedno preveri enote posameznega orodja.
+execute_python | Izvedi posebej pregledano Python diagnostiko SolidWorksa. | Surova koda; v zaščitenem načinu ni na voljo.
+export_step | Izvozi ta kos v novo datoteko STEP. | Določi izhodno pot; izvoz ni native zgodovina modela.
+export_stl | Izvozi ta kos v novo datoteko STL. | Uporabi trenutne nastavitve mreženja SolidWorksa; ta klic kakovosti ne nastavlja.
+list_planar_faces | Pokaži ravne ploskve kosa, njihove položaje in indekse. | Indekse osvežimo po spremembi modela.
+export_face_to_dxf | Izvozi izbrano ravno ploskev v DXF za razrez. | Aktivni part; ni splošen izvoz pogleda sestava.
+inspect_document | Preglej aktivni dokument, funkcije, sestavo, mere in reference. | Razdelki se izberejo glede na dokument; ni celovita potrditev izdelovalnosti.
+list_planes | Pokaži obstoječe referenčne ravnine. | Uporabimo dejanska imena iz modela.
+list_body_edges | Pokaži robove telesa v tem kosu. | Za robove komponent sestava uporabimo list_component_edges.
+measure_distance | Izmeri razdaljo med tema dvema potrjenima ploskvama kosa. | Potrebna sta aktualna indeksa ploskev in enota; ne poljubna referenca sestava.
+get_body_bounding_box | Pokaži zunanje gabarite teles tega kosa. | Izbira vidnih ali vseh teles; gabarit ni razvita mera ali nabavna dolžina.
+get_mass_properties | Izračunaj prostornino, maso in težišče kosa. | Masa je odvisna od dejansko dodeljenega materiala/gostote.
+set_view | Obrni prikaz v izometrijo oziroma pogled od zgoraj. | Spremeni pogled, ne geometrije.
+zoom_fit | Prilagodi povečavo, da se model vidi v celoti. | Samo sprememba pogleda.
+capture_view | Pripravi sliko trenutnega modela. | Slika je lahko prazna ali prekrita; vsebino je treba pregledati.
+undo | Razveljavi zadnji podprt korak v modelu. | Ni zagotovljen transakcijski povratek več operacij.
+redo | Ponovi zadnji razveljavljeni korak. | Odvisno od native zgodovine dokumenta.
+save_document | Shrani naš delovni kos kot novo native datoteko v output. | Uporabnikovih izvirnikov brez dovoljenja ne prepisujemo.
+restart_solidworks | Po moji potrditvi varno ponovno zaženi SolidWorks. | Zahteva izrecno potrditev; zavrne nevarno odprte dokumente.
+close_saved_outputs | Preveri in zapri naše shranjene, nespremenjene izhodne dokumente. | Neshranjenih, spremenjenih in uporabnikovih dokumentov ne zapira.
+create_new_part | Ustvari nov prazen kos. | Novo poskusno delo shranimo ločeno od knjižnice.
+create_new_assembly | Ustvari nov prazen sestav. | Vstavljanje in vezi so naslednji ločeni koraki.
+open_document | Odpri navedeno datoteko SolidWorks. | Vedno navedi pravo pot in revizijo.
+close_document | Zapri naš testni dokument brez shranjevanja. | Pri uporabnikovih spremembah zavrženje zahteva dovoljenje.
+get_document_info | Povej, kateri dokument je trenutno aktiven. | Preverimo pred spreminjanjem.
+list_open_documents | Pokaži vse trenutno odprte dokumente. | Ne odpira in ne zapira dokumentov.
+insert_component | V sestav vstavi izbrani kos na dogovorjeni položaj. | Določi datoteko in položaj; ni avtomatičnega dodajanja vezi.
+set_component_translation | Premakni ta plavajoči kos na navedene koordinate in ohrani zasuk. | Ena komponenta najvišje ravni; preveri pričakovani stari položaj.
+set_component_rotation | Zasukaj ta plavajoči kos na navedene kote in ohrani položaj. | Absolutni koti; ne popravlja vezi.
+set_component_fixed | Ta kos fiksiraj oziroma ga sprosti za premikanje. | Točen primerek najvišje ravni sestava.
+remove_component | Iz naše kopije odstrani ta primerek kosa. | Odstrani tudi njegove vezi; zahteva preverjeno trenutno datoteko.
+rename_component | Preimenuj ta primerek komponente. | Ne preimenuje projektnih datotek na disku.
+delete_mate | Odstrani točno navedeno vez iz sestava. | Predhodno preverimo ime in vrsto vezi.
+suppress_component | Ta kos izključi oziroma ga ponovno vključi. | Izključitev ne izbriše komponente; spremeni stanje sestava.
+assembly_diff | Primerjaj ta sestav s pričakovanim seznamom komponent in položajev. | Primerjava najvišje ravni; ni splošna geometrijska primerjava.
+list_components | Pokaži, kateri kosi so v sestavu in od kod so naloženi. | Hitri način za orientacijo, podrobni za transformacije in stanja.
+list_component_faces | Pokaži ploskve tega kosa v sestavu, da izbereva pravo za vez. | Po premiku ali dodani vezi osvežimo indekse.
+mate_coincident | Poravnaj ti dve ploskvi s sovpadno vezjo. | Potrebna sta točna primerka in indeksa ploskev.
+mate_concentric | Poravnaj osi teh dveh cilindričnih ploskev. | Koncentričnost sama ne določi aksialne lege.
+mate_distance | Med tema ploskvama dodaj vez z navedeno razdaljo. | Natančne ploskve in razdalja z enoto.
+add_mate | Med tema referencama dodaj kotno, vzporedno ali drugo podprto vez. | Ne ugibamo referenc samo po imenu kosa.
+create_component_pattern | Ta kos v sestavu ponovi linearno ali okoli osi. | Potrebni so seme, smer/os, število in razmik/kot.
+get_component | Preglej položaj, zasuk in vezi tega konkretnega primerka. | Trenutno točen primerek najvišje ravni.
+list_mates | Pokaži obstoječe vezi sestava. | To so konstrukcijske vezi, ne dokaz odsotnosti trkov.
+pack_and_go | Pripravi paket sestava z vsemi referencami. | Native Pack and Go; za neodvisno testiranje raje preverjeni copy_project.
+list_component_edges | Pokaži robove točno tega kosa v sestavu, tudi če se datoteka ponavlja. | Točna native pot; filtri in strani, brez avtomatičnega resolve.
+select_component_edges | Iz prej prikazanega seznama izberi te robove in preveri lastnika. | Posnetek iste MCP seje; po spremembi se seznam osveži.
+list_standard_parts | Pokaži standardne vijake, matice ali druge dele iz naše knjižnice. | Bere ustvarjeni katalog, ne išče poljubnih artiklov po spletu.
+get_standard_part_sizes | Pokaži razpoložljive velikosti izbranega standardnega dela. | Loči že izdelane in šele pripravljive velikosti.
+insert_standard_part | Vstavi vijak izbranega standarda, velikosti in dolžine. | Točen standard/velikost; vstavljanje še ni pravilna montažna vez.
+standard_library_status | Preveri stanje naše knjižnice standardnih delov. | Poroča stanje kataloga in navodilo za osvežitev.
+export_component_edge_svg | Pripravi označene poglede robov tega kosa za dogovor. | En kos/stran; žični prikaz, trenutna seja; ni izdelovalni DXF.
+select_component_svg_edges | Na tem prikazu T09 izberi R7 in R13 ter preveri prava robova. | Prikaz/map_id skupaj z oznako; dvoumni ali zastareli cilji se zavrnejo.
+get_sheet_metal_info | Preberi osnovno debelino, radij in K-faktor pločevine. | Samo prva definicija; za več teles list_sheet_metal_bodies.
+flatten_sheet_metal | Razvij oziroma ponovno upogni ta pločevinasti kos. | Začasno spremeni stanje modela; večtelesni izvoz ostaja omejen.
+get_flat_pattern_info | Izmeri gabarit razvitja in kos vrni v upognjeno stanje. | Med branjem dejansko razvije in ponovno upogne model.
+export_flat_pattern | Izvozi razvitje tega pločevinastega kosa v DXF. | Neposredni izvoz; za izbrano telo in izolacijo vira uporabi export_sheet_metal_body_dxf.
+create_sheet_metal_base_flange | Iz te skice naredi pločevino debeline 2 mm z radijem 2 mm. | Z new_body lahko doda ločeno telo z lastnimi parametri v isti part.
+create_tab_and_slot | Med tema telesoma pripravi povezavo z jezičkom in režo. | Točen rob prvega telesa in ploskev drugega; ne potrdi nosilnosti spoja.
+create_edge_flange | Na tem ravnem robu dodaj 30 mm zavih s kotom 90 stopinj. | Rob mora pripadati pločevini; dolžina, kot in smer morajo biti določeni.
+create_miter_flange | Na ta rob dodaj profilni zavih po pripravljeni skici. | Preverjen omejen odprt profil s štirimi segmenti; ne poljubna skica.
+list_sheet_metal_bodies | Za vsako pločevinasto telo pokaži debelino, radij in stanje razvitja. | Vključi skrita telesa; stanje ni dokaz pravilnega DXF za vsako telo.
+export_sheet_metal_body_dxf | Iz tega večtelesnega parta izvozi samo izbrano pločevinasto telo v DXF za razrez. | Čista shranjena kopija, svež indeks in stamp; izvozi prek ločene kopije v novo mapo zunaj projekta. Brez batch/nestinga.
+create_sheet_metal_hem | Na izbranem robu naredi odprt ali zaprt povratni zavih. | Trenutno enotelesna upognjena pločevina in raven rob.
+list_weldment_profiles | Pokaži profile, ki so že v naši knjižnici. | Uporabi obstoječe profile pred ustvarjanjem novih.
+create_structural_member | Iz črt te skice naredi varjenec z izbranim profilom. | Več teles v enem partu; povezane črte se obravnavajo v skupini.
+trim_weldment_members | Obreži ta dva člena, da dobita dogovorjeni stik. | Preverjen miter stik z ničelno varilno režo.
+create_weldment_end_cap | Zapri ta odprti konec votlega profila s pokrovom. | Potrebna je pravilna končna ploskev oziroma native zaznava konca.
+create_weldment_gusset | Med tema profiloma dodaj ojačitveno ploščico. | Telesi morata imeti dejanski skupni rob za podprti native spoj.
+create_cosmetic_weld_bead | Po teh robovih dodaj oznako zvara in izmeri njegovo dolžino. | Kozmetični zvar ne doda materiala v prostornino ali maso.
+get_cut_list | Osveži in preberi razrezni seznam varjenca. | Bere native lastnosti; to še ni optimizacija nabavnega razreza.
+get_cut_list_body_map | Pokaži, katera dejanska telesa pripadajo vsaki postavki razreza. | Brez osvežitve lastnosti; skrita telesa imajo drug indeksni kontekst.
+save_bodies | Izberi telesa tega varjenca in jih shrani kot povezane kose ter sestav. | Čista shranjena kopija; native funkcija lahko shrani vir; brez prenosa lastnosti.
+list_hole_wizard_sizes | Pokaži velikosti izvrtin DIN ali ISO iz našega kataloga. | Katalog ne pomeni, da so bile vse velikosti geometrijsko preizkušene.
+circular_pattern | To funkcijo ponovi okoli izbrane osi. | Določi točno funkcijo, os, število in kot.
+linear_pattern | To funkcijo ponovi vzdolž določene smeri. | Potrebni so točna funkcija, smer, razmik in število.
+mirror_feature | To funkcijo zrcali čez navedeno ravnino. | Točni imeni funkcije in ravnine.
+create_sketch_on_planar_face | Na tej točno določeni ravni ploskvi odpri skico. | Izbor z native indeksom namesto ugibanja po koordinati.
+create_reference_axis | Ustvari referenčno os v presečišču teh dveh ravnin. | Dve različni točno imenovani ravnini.
+create_reference_plane | Ustvari ravnino 50 mm od izbrane ravnine. | Podprt odmik; ne vsi načini definiranja ravnin.
+create_coordinate_system | Ustvari koordinatni sistem s tem izhodiščem in zasukom. | Navedi XYZ in po potrebi kote.
+rib | Iz te odprte skice naredi ojačitveno rebro. | Obstoječ solid, konstantna debelina, brez naklona rebra.
+dome | Na tej ravni ploskvi naredi kupolo. | Določi ploskev in višino.
+hole_wizard | Na tej ploskvi naredi izvrtino M6 po DIN, skozi vse. | Določimo vrsto/standard/velikost in mesto; navojne in cevne luknje niso potrjen obseg.
+shell_feature | Ta kos izvotli na navedeno debelino in odpri izbrane ploskve. | Najprej natančno določimo odstranjene ploskve.
+sweep_sketch | Ta zaprt profil potegni po navedeni poti. | Ločeni skici; začetek poti mora ustrezati profilu.
+loft_sketches | Med temi profili v tem vrstnem redu naredi prehod. | Vrstni red profilov vpliva na geometrijo.
+revolve_cut | S tem profilom izreži material okoli njegove osi. | Zaprti profil z eno konstrukcijsko osjo.
+sweep_cut | Po tej poti izreži kanal s tem profilom. | Zaprt profil in ločena skica poti.
+loft_cut | Med temi profili naredi prehodni izrez. | Določi zaporedje profilov.
+boundary_boss | Med dvema ali tremi profili naredi mejni volumen. | Ena smer; brez poljubnih pogojev tangentnosti.
+boundary_cut | Med dvema ali tremi profili naredi mejni izrez. | Omejeni native način, ne vse možnosti Boundary.
+draft_faces | Tem ploskvam dodaj navedeni izvlečni naklon glede na nevtralno ploskev. | Določi ploskve, nevtralno ploskev, kot in smer.
+set_custom_property | Temu kosu nastavi opis, šifro ali drugo tekstovno lastnost. | Lastnost dokumenta ali točno določene konfiguracije.
+create_configuration | Dodaj novo konfiguracijo z navedenim imenom. | Ne prepiše obstoječe konfiguracije.
+scale_body | To telo enakomerno povečaj z navedenim faktorjem. | Enakomerno skaliranje okoli izhodišča ali težišča.
+delete_body | Iz naše kopije odstrani to telo oziroma ohrani samo njega. | Pred posegom preverimo pravi indeks telesa.
+move_copy_body | To telo premakni za dani XYZ; po želji ohrani original kot kopijo. | Telesa znotraj parta, ne komponenta sestava.
+combine_bodies | Ti dve telesi združi, odštej ali ohrani njun presek. | Potrebna je ustrezna geometrijska medsebojna lega.
+insert_part | V ta part vstavi geometrijo drugega shranjenega kosa. | Doda stock telo; ni vstavljanje komponente sestava.
+set_appearance | Temu kosu nastavi dogovorjeno barvo. | Barva na ravni kosa in aktivne konfiguracije.
+apply_material | Temu kosu dodeli izbrani material iz naše baze. | Točen material in datoteka baze; vpliva na izračun mase.
+add_equation | Dodaj novo imenovano globalno spremenljivko s številčno ali tekstovno vrednostjo. | Tekst je shranjen kot tekstovni izraz; za urejanje obstoječe enačbe drugo orodje.
+extrude_sketch | To skico iztisni 20 mm v določeno smer. | Izdelava volumna iz skice, ne pločevinasta definicija.
+cut_extrude | S to skico izreži material do navedene globine. | Predhodno preverimo skico, telo in smer.
+revolve_sketch | Ta profil zavrti okoli njegove konstrukcijske osi. | Profil in os morata biti pripravljena.
+fillet_edges | Na teh potrjenih robovih naredi zaokrožitev R2. | Orodje za part; izbor sestavne komponente še ne omogoči Edit Part.
+chamfer_edges | Na teh robovih naredi posnetje 1 mm pod kotom 45 stopinj. | Podprto kot/razdalja ali dve razdalji; pravilni robovi v partu.
+list_features | Pokaži zgodovino funkcij tega modela. | Imena uporabimo za nadaljnje natančne posege.
+create_sketch | Na navedeni ravnini odpri novo skico. | Določi ravnino in namen skice.
+create_sketch_on_face | Odpri skico na ploskvi pri navedeni točki. | Koordinate lahko zadenejo napačno ploskev; indeksni način je natančnejši.
+create_sketch_on_plane | Odpri skico na točno imenovani standardni ali lastni ravnini. | Uporabi obstoječo ravnino.
+create_3d_sketch | Odpri 3D skico za osi profilov varjenca. | Točke so v koordinatah modela.
+draw_line | V aktivni skici nariši črto med tema točkama. | V 2D skici uporabljamo njene lokalne koordinate.
+draw_line_3d | V 3D skici nariši črto med navedenima XYZ točkama. | Izrecni tridimenzionalni krajišči.
+draw_centerline | Nariši konstrukcijsko središčnico za os vrtenja. | Konstrukcijska geometrija ne postane obris materiala.
+draw_point | V aktivni skici dodaj točko. | Določi koordinate in enoto.
+draw_circle | Nariši krog z navedenim središčem in radijem. | Osnovno orodje uporablja sejne enote; radij ni premer.
+draw_circle_radius | Nariši krog s središčem tukaj in radijem 10 mm. | Radij ni premer.
+draw_rectangle | Nariši pravokotnik med nasprotnima vogaloma. | Dimenzije oziroma koordinate morajo biti določene.
+draw_center_rectangle | Nariši pravokotnik 100 × 50 mm okoli tega središča. | Lahko ustvari konstrukcijske diagonale; pri revolve to upoštevamo.
+draw_rectangle_3point_corner | Nariši pravokotnik iz treh vogalnih točk. | Prvi dve točki določita prvi rob.
+draw_rectangle_3point_center | Nariši zasukan pravokotnik iz središča in dveh dodatnih točk. | Točke določijo položaj in smer širine.
+draw_parallelogram | Nariši paralelogram skozi te tri vogale. | Vrstni red vogalov je pomemben.
+draw_arc | Nariši lok s središčem, radijem ter začetnim in končnim kotom. | Pozitivna smer je nasprotna urnemu kazalcu.
+draw_arc_3point | Nariši lok od te točke do druge skozi tretjo. | Tretja točka določa stran loka.
+draw_tangent_arc | Iz tega krajišča nadaljuj s tangentnim lokom do te točke. | Začetek mora biti krajišče obstoječega segmenta.
+draw_polygon | Nariši pravilen šestkotnik okoli tega središča. | Določi število stranic, velikost in orientacijo.
+draw_spline | Nariši zlepek skozi te urejene točke. | Točke morajo biti v pravilnem zaporedju.
+draw_slot | Nariši ravno podolgovato režo z danima središčema in širino. | Širina reže in razdalja središč sta različna podatka.
+draw_arc_slot | Nariši ukrivljeno režo s središčem loka in navedeno širino. | Določi središče, začetek in konec loka.
+draw_arc_slot_3point | Nariši ukrivljeno režo skozi tri točke in z navedeno širino. | Točke ležijo na središčnici reže.
+draw_ellipse | Nariši elipso z navedenima polosema in zasukom. | Polosi niso celotna širina in višina.
+draw_elliptical_arc | Nariši del elipse med navedenima parametričnima kotoma. | Ne navaden krožni lok.
+draw_parabola | Nariši parabolični segment iz gorišča, vrha in krajišč. | Potrebne so geometrijsko skladne točke.
+draw_equation_curve | V skici nariši krivuljo po podani enačbi y=f(x). | Določi izraz, območje in enote.
+draw_equation_curve_3d | V 3D skici nariši krivuljo x(t), y(t), z(t). | Tri enačbe in interval parametra t.
+draw_sketch_text | V skico dodaj besedilo na dogovorjeni položaj. | Skicno besedilo, ne opomba tehnične risbe.
+convert_entities | Robove te ploskve prenesi v aktivno skico. | Nekaj usklajenih robov; množična pretvorba vseh robov ni zanesljiva.
+close_sketch | Zaključi trenutno aktivno skico. | Zapiranje skice ni shranjevanje dokumenta.
+get_sketch_status | Povej, katera skica je aktivna in katere obstajajo. | Uporabno pred risanjem ali iztiskanjem.
+inspect_construction_geometry | Preberi to skicno črto oziroma preveri profil konstrukcijskega člena. | Sredina obsega krajišč ni splošno težišče krivulje.
+create_centered_profile_sketch | Iz potrjene geometrije pripravi centrirano skico profila v novem kosu. | Poskusni part; ne namesti ali prepiše profila v knjižnici.
+trim_entities | Odreži odvečni del teh skicnih segmentov. | Najprej določimo točna imena segmentov in mesto reza.
+extend_entities | Te skicne segmente podaljšaj do določenega stika. | Podprte native vrste segmentov in pravilna skica.
+sketch_fillet | Vogal te skice zaokroži z navedenim radijem. | To ni zaokrožitev robov 3D telesa.
+sketch_chamfer | Vogal te skice posnemi z navedenima merama. | To ni posnetje robov 3D telesa.
+offset_entities | Te skicne segmente odmakni za 5 mm na dogovorjeno stran. | Smer odmika mora biti jasna.
+sketch_mirror | Te segmente zrcali čez navedeno središčnico. | Zrcalna črta naj bo neodvisna od zrcaljenih segmentov.
+split_entities | Ta skicni segment razdeli pri navedeni točki. | Zaprta krivulja zahteva dve točki delitve.
+rotate_entities | To skico zasukaj okoli navedene točke za 30 stopinj. | Native operacija lahko zavrti tudi koordinatni okvir skice.
+scale_entities | Te segmente povečaj za navedeni faktor. | Skaliranje je okoli izhodišča skice.
+toggle_construction | Te črte spremeni v konstrukcijske oziroma navadne. | Navedi želeno stanje, da ne obračamo na slepo.
+sketch_pattern_linear | Te skicne segmente ponovi v mreži 2 × 3. | Število vključuje začetni primerek.
+sketch_pattern_circular | Te skicne segmente enakomerno ponovi okoli središča. | Določi število in skupni kot; native središče se preveri.
+add_sketch_relation | Med tema segmentoma dodaj vzporednost, sovpadnost ali drug podprt odnos. | Obstoječi odnos ni nova uspešno dodana vez.
+get_sketch_relations | Pokaži odnose skice in ali je povsem določena. | Brez dodajanja ali brisanja odnosov.
+delete_sketch_relations | Iz te skice odstrani vse odnose izbrane vrste. | To spremeni določljivost geometrije.
+add_sketch_dimension | Ta segment skice določi z mero 100 mm. | Referenčne/driven mere ni mogoče uporabljati kot gonilno mero.
+list_drawing_views | Pokaži poglede na aktivnem listu risbe. | Zahteva tehnično risbo, ne aktivnega parta.
+add_standard_3_view | Na risbo dodaj tri standardne poglede tega modela. | Predhodno pripravljen dokument tehnične risbe.
+insert_cut_list_table | Na risbo vstavi razrezno tabelo varjenca. | Potreben ustrezen model/pogled in predloga tabele.
+add_drawing_dimension | Na tem risalnem pogledu samodejno dodaj osnovne mere. | Samodejno baseline kotiranje celega izbranega pogleda, ne ročna postavitev izbrane mere.
+insert_marked_dimensions | Na ta pogled prenesi modelne mere, označene za risbo. | Ne uvozi samodejno vseh neoznačenih mer.
+auto_balloon | Na risalnem pogledu označi kose z balončki. | Zahteva ustrezne podatke BOM/cut-list; ni SVG vezava robov.
+planar_surface | Iz zaprte skice naredi ravno površino. | Površina še nima prostornine materiala.
+thicken_surface | To površino odebeli na navedeno debelino. | Ni isto kot native definicija pločevine.
+extrude_surface | To skico iztisni v odprto površino. | Enosmerni površinski iztis.
+revolve_surface | To odprto skico zavrti okoli ene konstrukcijske osi v površino. | Skica mora vsebovati točno eno ustrezno os.
+offset_surface | Od te ravne površine naredi vzporedno površino na odmiku. | Trenutni podprti obseg je raven list.
+knit_surface | Te stikajoče se površine zašij v en površinski sklop. | Stik mora biti geometrijsko ustrezen.
+cut_with_surface | S to ravno površino odstrani dogovorjeno stran telesa. | Določi stran reza; ne poljubna ukrivljena površina.
+extend_surface | Ta rob površine linearno podaljšaj za navedeno dolžino. | En rob površinskega telesa.
+ruled_surface | Iz tega roba pripravi tangentno izpeljano površino. | Podprt tangentni način.
+loft_surface | Med tema profiloma pripravi odprto prehodno površino. | Dve urejeni skici.
+sweep_surface | Ta profil potegni po poti kot odprto površino. | Ločeni skici profila in poti.
+filled_surface | To zaprto skicno mejo zapolni s površinskim obližem. | Ne pomeni poljubnega popravljanja uvoženega telesa.
+inspect_project_references | Pred kopiranjem preveri vse shranjene reference projekta. | Ne odpira ali spreminja izvirnikov; manjkajoče reference so ovira.
+copy_project | Iz tega projekta naredi neodvisno testno kopijo z vsemi referencami. | Nova dovoljena mapa, unikatna imena, relink in preverjene izvirne kontrolne vsote.
+list_model_parameters | Pokaži obstoječe gonilne mere in parametre tega modela. | Ne izmišljuje pomena posamezne mere.
+set_model_dimension | To obstoječo gonilno mero spremeni s stare na novo vrednost. | Preverjena delovna kopija, prava konfiguracija in pričakovana stara mera.
+update_model_equation | Spremeni navedeno obstoječo enačbo modela. | Izrecno pričakovani stari izraz in nova vrednost.
+replace_component | Ta primerek sestava zamenjaj z navedeno datoteko. | Samo preverjena kopija; po zamenjavi preverimo vezi.
+import_neutral_file | Uvozi navedeni STEP, IGES, Parasolid ali SAT za nadaljnji pregled. | Uvoz ne zagotovi parametrične zgodovine ali popolne geometrije.
+read_parameter_workspace | Pokaži naš register projektnih parametrov, osnutke in zahteve. | Register brez povezave s CAD ni trenutna geometrija modela.
+write_parameter_workspace | V register zapiši parameter ali osnutek spremembe. | Sam zapis še ne spremeni CAD modela.
+apply_parameter_changes | Na preverjenih kopijah uporabi te dogovorjene spremembe mer. | Delna napaka ne pomeni samodejne razveljavitve prejšnjih korakov.
+inspect_parameter_dependencies | Pokaži reference dokumentov, skupne pojavitve in gonilne enačbe. | Ne sklepa vseh manjkajočih konstrukcijskih odvisnosti.
+import_parameter_workspace | Iz obstoječih mer naše kopije pripravi nov projekt v registru. | Ne spreminja mer modela.
+process_parameter_workspace_job | Izvedi eno že pripravljeno zahtevo iz registra in zapiši rezultat. | Lahko shrani spremenjene kopije; zahteva preverjene immutable podatke naloge.
+compare_project_versions | Primerjaj ti dve shranjeni projektni kopiji in njune spremembe. | Datoteke/parametri/masa niso splošen dokaz geometrijske enakovrednosti.
+checkpoint_project | Iz shranjenega stanja pripravi novo preverjeno kontrolno kopijo. | Zavrne neshranjene spremembe; ne shranjuje izvirnika.
+make_component_independent | Samo ta primerek naredi neodvisen od ostalih ponovitev. | Nova kopija referenc in zamenjava enega primerka; preverimo vezi.
+rename_project_documents | V novi kopiji projekta preimenuj navedene datoteke in popravi reference. | Nikoli ne preimenuje izvirnikov na mestu.
+present_result | Odpri točno naš preverjeni rezultat in ga pripravi za pregled. | Aktivacija ne zagotovi, da ga uporabnikov zaslon dejansko prikazuje.
+edit_feature_definition | Temu obstoječemu iztisu spremeni globino ali podprti končni pogoj. | Omejena vrsta funkcij/konfiguracij; ni splošen urejevalnik vseh definicij.
+edit_mate | Tej obstoječi razdaljni ali kotni vezi spremeni gonilno mero. | Ne zamenjuje poljubnih referenc vezi.
+edit_component_pattern | V tej obstoječi ponovitvi komponent spremeni število ali razmik. | Podprti linearni vzorec; omejitve konfiguracij.
+manage_configurations | Pokaži konfiguracije ali preklopi na navedeno obstoječo konfiguracijo. | Ne ustvarja, preimenuje ali briše konfiguracij.
+inspect_model_health | Preveri napake funkcij in manjkajoče reference modela. | Ne nadomesti geometrijskega ali izdelovalnega pregleda.
+check_interferences | V sestavu preveri dejanske volumenske trke in udeležene kose. | Odsotnost trka ne dokazuje stika ali zahtevanega odmika.
+replace_structural_profile | Temu členu varjenca zamenjaj profil z drugim iz knjižnice. | Preverjen tip člena, ena konfiguracija in znana stara pot profila.
+create_persistent_reference | Za to funkcijo ustvari in preveri trajno native referenco. | Funkcije, ne poljubne ploskve; vezano na dokument in konfiguracijo.
+resolve_persistent_reference | Preveri, ali ta shranjena referenca še kaže na isto funkcijo. | Brez nadomestnega iskanja po podobnem imenu.
+inspect_holes_and_fasteners | Pokaži native funkcije izvrtin Hole Wizard in Hole Series. | Iz premera ne prepozna vijaka; ne pregleda sam vseh kosov sestava.
+manage_external_references | Preglej zunanje reference tega dokumenta. | Zaklep, odklep, prekinitev in relink v tem orodju niso omogočeni.
+build_manufacturing_package | Za preverjeno kopijo pripravi izbrane native, STEP, DXF in tabelarične izhode. | Paket poroča tudi delne napake; ni avtomatična izdelovalna potrditev.
+update_drawing_package | Obnovi povezane risbe naše kopije in preveri liste. | Samo izrecno povezane risbe; shranjevanje je posebej določeno.
+plan_stair | Iz dogovorjene višine in števila dvigov pripravi koncept stopnic. | Konceptni izračun; ne ustvari CAD in ne potrdi skladnosti.
+plan_railing | Izračunaj razpored stebrov ograje za navedeno dolžino in višino. | Brez konstrukcijskega izračuna nosilnosti.
+plan_segments | Predlagaj delitev dolžin po naših transportnih in cinkarskih omejitvah. | Omejitve poda uporabnik; orodje ne izumi spojev.
+review_galvanizing | Preglej navedene votline in predvideni položaj pri cinkanju. | Ne dodaja samodejno odzračevalnih lukenj.
+plan_stair_turn | Izračunaj koncept podesta ali enakokotnih zavitih stopnic. | Koncept, ne preverjena geometrija vsake dejanske stopnice.
+create_static_study | Za ta kos pripravi native statično študijo. | Potreben ustrezen Simulation; pravilni material in robni pogoji so ločena naloga.
+apply_fixed_fixture | Te potrjene ploskve v študiji togo vpni. | Fizična smiselnost vpetja mora biti določena.
+apply_force_load | Na te ravne ploskve dodaj navedeno normalno silo ali podprti navor. | Samo normalna sila na ravnih ploskvah; navor potrebuje referenčno os in izrecne enote.
+apply_pressure_load | Na te ploskve dodaj tlak z izrecno navedeno enoto. | Tlak ni skupna sila; pomembna sta površina in enota.
+run_analysis | Ustvari mrežo in poženi pripravljeno študijo. | Koda uspeha ne potrdi smiselnosti mreže ali robnih pogojev.
+get_stress_results | Preberi največje in najmanjše napetosti rešene študije. | Rezultat brez presoje singularnosti ni dovoljena obremenitev.
+get_displacement_results | Preberi pomike rešene študije. | Določi komponento oziroma rezultanto in korak.
+get_reaction_results | Preberi reakcije na vpetjih in primerjaj ravnovesje obremenitev. | Pri solid mreži native momentni del ne pomeni celotne fizične momentne reakcije.
+get_routing_status | Preveri, ali je Routing sploh omogočen in nameščen. | Odloženo področje; prisotnost datotek ne potrdi licence ali delovanja.
+inspect_routing_context | Preveri native Routing stanje aktivnega sestava. | Manager ne dokazuje ustvarjene cevi.
+list_routing_connection_points | Pokaži native CPoint priključke aktivnega kosa. | Lokalni mm; ne vključuje vseh RPoint ali primerkov sestava.
+get_routing_component_metadata | Preberi native Routing vrsto in opis komponente. | Metapodatki niso dokaz prilagodljive cevi.
+list_routing_reference_edges | Pokaži krožne robove, primerne za pripravo CPoint priključka. | Indeksi so vezani na trenutno geometrijo kosa.
+create_routing_connection_point | Na tem krožnem robu pripravi native cevni priključek CPoint. | Ne ustvari trase ali dokončane cevne povezave.
+get_component_connection_points | Pokaži lokalni in sestavni položaj priključkov tega primerka. | Naložen kos s pravo konfiguracijo; brez samodejnega resolve.
+measure_routing_connection_gap | Izmeri razmik in smerno poravnavo teh dveh priključkov. | Ujemanje ne potrdi fizične združljivosti ali povezane trase.
+update_routing_connection_point | Temu CPoint spremeni premer, stub dolžino ali oznako priključka. | Spremeni kos; napaka ne zagotavlja samodejne razveljavitve.
+get_routing_library_article | Preberi točen SN4 artikel iz naše obstoječe knjižnice. | Manjkajočih mer ne izmišljuje; katalog ni dokazana native trasa.
+configure_routing_component | Temu kosu nastavi Routing opis oziroma pravilo vključevanja priključkov. | Ne spremeni poljubne klasifikacije in ne ustvari cevi.
+get_routing_file_locations | Preberi trenutne poti in nastavitve Routing knjižnice. | Brez spreminjanja globalnih nastavitev.
+list_routing_path_segments | Preberi ravne odseke in loke native Routing 3D skice. | Lokalna geometrija; konstrukcijski segmenti niso del dolžine trase.
+routing_properties_command | Na naši Routing kopiji odpri oziroma potrdi podprte Route Properties. | Native UI ovira ostaja; uspeh ne pomeni ustvarjene cevi SN4.
+inspect_routing_active_edit | Preveri, ali je aktivno pravo native urejanje trase. | Ne vstopa samodejno v urejanje.
+resize_active_routing_line | V pravilno aktivnem urejanju spremeni dolžino izbranega ravnega odseka. | Ne dokazuje samodejno ustvarjene prilagodljive cevi.
+enter_routing_edit | Vstopi v urejanje izbrane native Routing trase. | Odloženo področje; stanje je treba dejansko preveriti.
+exit_active_routing_edit | Zapusti aktivno native urejanje trase. | To še ni kontrolirano shranjevanje dokončane trase.
+
+plan_assembly_documentation | Za ta sestav pripravi seznam kosov, količine in načrt map za delavniške, sestavne in montažne risbe ter izvoze. | Čist shranjen sestav in nova mapa; načrt JSON/CSV/Markdown, brez dejanskih PDF/DXF/STEP. Vrsto teles in make/buy preverimo posebej.
+
+inspect_part_manufacturing | Preglej telesa tega kosa, razrezni seznam in možnosti razreza pred izvozom. | Bere trenutno geometrijo brez osveževanja. Plošča je le geometrijski kandidat; material in make/buy nista potrjena.
+
+export_assembly_manufacturing_package | Iz svežega načrta izberi nekaj glavnih stranic in samo zanje pripravi STEP ter osnutke risb PDF v urejen paket. | Za item_ids je obvezen plan_fingerprint kot expected_plan_fingerprint; preverijo se vse shranjene odvisnosti. Nova izolirana kopija, izrecni formati. STEP je celoten part; risbe nimajo potrjenih vseh mer. Grezene stranice niso samodejni kandidati za DXF. Napake in izpuščeni cilji ostanejo v kazalu.
+
+create_documentation_drawing | Za ta kos ali sestav naredi prvokotno risbo s tremi pogledi ter shrani native risbo in PDF. | Nova izolirana kopija in nova mapa; osnutek z oznako NI ZA IZDELAVO, brez potrjene celovitosti mer, tolerance, BOM ali montažnih navodil.
+
+request_manufacturing_package_stop | Ustavi skupinski izvoz po koncu trenutnega kosa in zapri njegove testne kopije. | Potrebuje mapo tekočega paketa. Ne prekine native klica in ne zapre SolidWorksa; deluje mimo zasedene COM niti.

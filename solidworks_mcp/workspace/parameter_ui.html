@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="sl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Konstrukcijski parametri · SolidWorks MCP</title>
+  <link rel="stylesheet" href="/app.css?token={{TOKEN}}">
+  <script defer src="/state.js?token={{TOKEN}}"></script>
+  <script defer src="/app.js?token={{TOKEN}}"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div><div class="eyebrow">SOLIDWORKS · PROJEKTNI DELOVNI PROSTOR</div><h1>Konstrukcijski parametri</h1></div>
+    <div class="topright"><label>Projekt <select id="projects"></select></label><span id="connection" class="pill">CAD povezava ni aktivna</span></div>
+  </header>
+  <main>
+    <aside class="sidebar">
+      <section class="sidebar-head"><h2>Elementi</h2><button id="new-project" class="light">+ Projekt</button></section>
+      <div id="owners" class="tree"></div>
+      <button id="new-owner" class="light full">+ Dodaj element</button>
+      <div class="sidebar-note">Projektni podatki se shranjujejo lokalno. Spremembe osnutka še ne spreminjajo modela.</div>
+    </aside>
+    <section class="content">
+      <div class="content-head"><div><div id="path" class="eyebrow">IZBERITE PROJEKT</div><h2 id="heading">Pregled parametrov</h2><p id="coverage"></p></div><div><button id="export" class="light">Izvozi</button> <button id="refresh" class="light">Osveži</button></div></div>
+      <div class="toolbar"><input id="search" type="search" placeholder="Poišči parameter ali element …" aria-label="Poišči parameter"><select id="filter" aria-label="Filtriraj parametre"><option value="all">Vsi parametri</option><option value="missing">Potrebujem podatek</option><option value="draft">Spremenjeni osnutki</option><option value="derived">Izračunani</option><option value="invalid">Napake in konflikti</option><option value="readonly">Samo za branje</option></select><button id="new-parameter" class="primary">+ Parameter</button></div>
+      <div id="stats" class="stats"></div>
+      <div id="parameters" class="parameter-list"></div>
+      <p id="empty" class="empty" hidden>Za ta pogled še ni parametrov.</p>
+    </section>
+    <aside class="rightbar">
+      <section class="sidecard"><div class="eyebrow">ZAHTEVA AGENTU</div><h2>Povejte, kaj potrebujete</h2><p>Zahteva dobi izbrani kontekst in čaka na agenta. Oddaja ne spremeni CAD modela.</p><textarea id="request-text" rows="4" placeholder="Na primer: preveri višino ograje ob podestu …"></textarea><button id="send-request" class="primary full">Oddaj zahtevo</button><div id="requests"></div></section>
+      <section class="sidecard"><div class="eyebrow">STANJE</div><h2>Spremembe</h2><div id="drafts"></div><button id="queue-cad" class="primary full">Oddaj osnutke za spremembo CAD</button><p class="hint">Vezane mere preveri in izvede agent prek MCP. Oddaja sama ne spremeni modela; po izvedbi osvežite prikaz.</p><div id="cad-jobs"></div></section>
+      <section class="sidecard"><div class="eyebrow">SLEDLJIVOST</div><h2>Zgodovina</h2><div id="history"></div></section>
+    </aside>
+  </main>
+  <dialog id="dialog"><form id="form" method="dialog"><h2 id="dialog-title"></h2><div id="form-fields"></div><div class="dialog-actions"><button type="button" id="cancel" class="light">Prekliči</button><button type="submit" class="primary">Shrani</button></div></form></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
+

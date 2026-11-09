@@ -1,0 +1,732 @@
+{
+  "create_configuration": {
+    "properties": {
+      "activate": {
+        "default": false,
+        "type": "boolean"
+      },
+      "alternate_name": {
+        "default": "",
+        "type": "string"
+      },
+      "comment": {
+        "default": "",
+        "type": "string"
+      },
+      "description": {
+        "default": "",
+        "type": "string"
+      },
+      "name": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "options": {
+        "default": 0,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "parent_configuration": {
+        "default": "",
+        "type": "string"
+      },
+      "rebuild": {
+        "default": false,
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "name"
+    ],
+    "type": "object"
+  },
+  "create_structural_member": {
+    "properties": {
+      "allow_protrusion": {
+        "default": true,
+        "type": "boolean"
+      },
+      "connected_segments_option": {
+        "default": 1,
+        "type": "integer"
+      },
+      "corner_type": {
+        "default": "none",
+        "enum": [
+          "none",
+          "miter"
+        ],
+        "type": "string"
+      },
+      "group_mode": {
+        "default": "auto",
+        "enum": [
+          "auto",
+          "all",
+          "per_segment"
+        ],
+        "type": "string"
+      },
+      "profile_path": {
+        "type": "string"
+      },
+      "segment_indices": {
+        "items": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "type": "array"
+      },
+      "separate_groups": {
+        "default": false,
+        "type": "boolean"
+      },
+      "sketch_name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "sketch_name",
+      "profile_path"
+    ],
+    "type": "object"
+  },
+  "create_tab_and_slot": {
+    "properties": {
+      "edge_treatment": {
+        "default": "sharp",
+        "enum": [
+          "sharp",
+          "fillet",
+          "chamfer"
+        ],
+        "type": "string"
+      },
+      "edge_treatment_mm": {
+        "default": 1.0,
+        "exclusiveMinimum": 0,
+        "type": "number"
+      },
+      "end_offset_mm": {
+        "default": 0.0,
+        "minimum": 0,
+        "type": "number"
+      },
+      "instances": {
+        "default": 1,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "offset_from_edges": {
+        "default": false,
+        "type": "boolean"
+      },
+      "slot_clearance_mm": {
+        "default": 0.2,
+        "minimum": 0,
+        "type": "number"
+      },
+      "slot_face_index": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "spacing": {
+        "default": "single",
+        "enum": [
+          "single",
+          "equal",
+          "length"
+        ],
+        "type": "string"
+      },
+      "spacing_mm": {
+        "exclusiveMinimum": 0,
+        "type": "number"
+      },
+      "start_offset_mm": {
+        "default": 0.0,
+        "minimum": 0,
+        "type": "number"
+      },
+      "tab_edge_index": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "tab_face_index": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "tab_height_mm": {
+        "default": 6.0,
+        "exclusiveMinimum": 0,
+        "type": "number"
+      },
+      "tab_length_mm": {
+        "default": 10.0,
+        "exclusiveMinimum": 0,
+        "type": "number"
+      },
+      "tab_thickness_mm": {
+        "exclusiveMinimum": 0,
+        "type": "number"
+      }
+    },
+    "required": [
+      "tab_edge_index",
+      "slot_face_index"
+    ],
+    "type": "object"
+  },
+  "create_weldment_end_cap": {
+    "properties": {
+      "body_name": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "chamfer": {
+        "default": false,
+        "type": "boolean"
+      },
+      "chamfer_mm": {
+        "default": 0.0,
+        "minimum": 0.0,
+        "type": "number"
+      },
+      "corner_treatment": {
+        "default": false,
+        "type": "boolean"
+      },
+      "depth_mm": {
+        "default": 5.0,
+        "minimum": 0.001,
+        "type": "number"
+      },
+      "direction": {
+        "default": "inward",
+        "enum": [
+          "inward",
+          "outward",
+          "inset"
+        ],
+        "type": "string"
+      },
+      "face_indices": {
+        "items": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "type": "array"
+      },
+      "given_offset": {
+        "default": false,
+        "type": "boolean"
+      },
+      "inset_mm": {
+        "default": 2.0,
+        "minimum": 0.0,
+        "type": "number"
+      },
+      "offset_value_mm": {
+        "default": 0.0,
+        "minimum": 0.0,
+        "type": "number"
+      },
+      "reverse": {
+        "default": false,
+        "type": "boolean"
+      },
+      "wall_thickness_ratio": {
+        "default": 0.6,
+        "minimum": 0.01,
+        "type": "number"
+      }
+    },
+    "required": [
+      "body_name"
+    ],
+    "type": "object"
+  },
+  "create_weldment_gusset": {
+    "properties": {
+      "angle_deg": {
+        "default": 45.0,
+        "exclusiveMaximum": 180,
+        "exclusiveMinimum": 0,
+        "type": "number"
+      },
+      "chamfer": {
+        "default": false,
+        "type": "boolean"
+      },
+      "chamfer1_mm": {
+        "default": 12.5,
+        "minimum": 0.0,
+        "type": "number"
+      },
+      "chamfer2_mm": {
+        "default": 12.5,
+        "minimum": 0.0,
+        "type": "number"
+      },
+      "chamfer_angle_deg": {
+        "default": 45.0,
+        "exclusiveMaximum": 180,
+        "exclusiveMinimum": 0,
+        "type": "number"
+      },
+      "crv_index": {
+        "default": 0,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "depth_mm": {
+        "default": 5.0,
+        "minimum": 0.001,
+        "type": "number"
+      },
+      "direction": {
+        "default": "both",
+        "enum": [
+          "both",
+          "inner",
+          "outer"
+        ],
+        "type": "string"
+      },
+      "face_a_index": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "face_b_index": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "leg1_mm": {
+        "default": 25.0,
+        "minimum": 0.001,
+        "type": "number"
+      },
+      "leg2_mm": {
+        "default": 25.0,
+        "minimum": 0.001,
+        "type": "number"
+      },
+      "leg3_mm": {
+        "default": 15.0,
+        "minimum": 0.001,
+        "type": "number"
+      },
+      "leg4_mm": {
+        "default": 15.0,
+        "minimum": 0.001,
+        "type": "number"
+      },
+      "location": {
+        "default": "center",
+        "enum": [
+          "center",
+          "start",
+          "end"
+        ],
+        "type": "string"
+      },
+      "offset": {
+        "default": false,
+        "type": "boolean"
+      },
+      "offset_mm": {
+        "default": 5.0,
+        "minimum": 0.0,
+        "type": "number"
+      },
+      "profile": {
+        "default": "triangle",
+        "enum": [
+          "triangle",
+          "polygon"
+        ],
+        "type": "string"
+      },
+      "reverse_dir": {
+        "default": false,
+        "type": "boolean"
+      },
+      "reverse_face": {
+        "default": false,
+        "type": "boolean"
+      },
+      "use_length_dim": {
+        "default": false,
+        "type": "boolean"
+      },
+      "use_length_dim_for_chamfer": {
+        "default": true,
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "face_a_index",
+      "face_b_index"
+    ],
+    "type": "object"
+  },
+  "edit_component_pattern": {
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "action": {
+              "const": "linear_count"
+            }
+          },
+          "required": [
+            "action"
+          ]
+        },
+        "then": {
+          "required": [
+            "instances",
+            "expected_instances"
+          ]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "action": {
+              "const": "spacing_dimension"
+            }
+          },
+          "required": [
+            "action"
+          ]
+        },
+        "then": {
+          "required": [
+            "dimension_name",
+            "spacing_mm",
+            "expected_spacing_mm"
+          ]
+        }
+      },
+      {
+        "if": {
+          "anyOf": [
+            {
+              "not": {
+                "required": [
+                  "action"
+                ]
+              }
+            },
+            {
+              "properties": {
+                "action": {
+                  "const": "suppression"
+                }
+              }
+            }
+          ]
+        },
+        "then": {
+          "required": [
+            "suppressed",
+            "expected_suppressed"
+          ]
+        }
+      }
+    ],
+    "properties": {
+      "action": {
+        "default": "suppression",
+        "enum": [
+          "suppression",
+          "linear_count",
+          "spacing_dimension"
+        ],
+        "type": "string"
+      },
+      "configuration": {
+        "type": "string"
+      },
+      "dimension_name": {
+        "type": "string"
+      },
+      "edit_original": {
+        "default": false,
+        "type": "boolean"
+      },
+      "expected_instances": {
+        "minimum": 2,
+        "type": "integer"
+      },
+      "expected_spacing_mm": {
+        "type": "number"
+      },
+      "expected_suppressed": {
+        "type": "boolean"
+      },
+      "expected_type": {
+        "type": "string"
+      },
+      "feature_name": {
+        "type": "string"
+      },
+      "instances": {
+        "minimum": 2,
+        "type": "integer"
+      },
+      "spacing_mm": {
+        "exclusiveMinimum": 0,
+        "type": "number"
+      },
+      "suppressed": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "feature_name",
+      "expected_type",
+      "configuration"
+    ],
+    "type": "object"
+  },
+  "edit_feature_definition": {
+    "allOf": [
+      {
+        "else": {
+          "required": [
+            "suppressed",
+            "expected_suppressed"
+          ]
+        },
+        "if": {
+          "properties": {
+            "action": {
+              "const": "extrusion"
+            }
+          },
+          "required": [
+            "action"
+          ]
+        },
+        "then": {
+          "required": [
+            "depth_mm",
+            "expected_depth_mm",
+            "end_condition",
+            "expected_end_condition"
+          ]
+        }
+      }
+    ],
+    "properties": {
+      "action": {
+        "default": "suppression",
+        "enum": [
+          "suppression",
+          "extrusion"
+        ],
+        "type": "string"
+      },
+      "configuration": {
+        "type": "string"
+      },
+      "depth_mm": {
+        "exclusiveMinimum": 0,
+        "type": "number"
+      },
+      "edit_original": {
+        "default": false,
+        "type": "boolean"
+      },
+      "end_condition": {
+        "enum": [
+          "blind",
+          "mid_plane"
+        ],
+        "type": "string"
+      },
+      "expected_depth_mm": {
+        "type": "number"
+      },
+      "expected_end_condition": {
+        "enum": [
+          "blind",
+          "mid_plane"
+        ],
+        "type": "string"
+      },
+      "expected_suppressed": {
+        "type": "boolean"
+      },
+      "expected_type": {
+        "type": "string"
+      },
+      "feature_name": {
+        "type": "string"
+      },
+      "suppressed": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "feature_name",
+      "expected_type",
+      "configuration"
+    ],
+    "type": "object"
+  },
+  "edit_mate": {
+    "allOf": [
+      {
+        "else": {
+          "required": [
+            "suppressed",
+            "expected_suppressed"
+          ]
+        },
+        "if": {
+          "properties": {
+            "action": {
+              "const": "dimension"
+            }
+          },
+          "required": [
+            "action"
+          ]
+        },
+        "then": {
+          "required": [
+            "dimension_name",
+            "value",
+            "expected_value",
+            "unit"
+          ]
+        }
+      }
+    ],
+    "properties": {
+      "action": {
+        "default": "suppression",
+        "enum": [
+          "suppression",
+          "dimension"
+        ],
+        "type": "string"
+      },
+      "configuration": {
+        "type": "string"
+      },
+      "dimension_name": {
+        "type": "string"
+      },
+      "edit_original": {
+        "default": false,
+        "type": "boolean"
+      },
+      "expected_suppressed": {
+        "type": "boolean"
+      },
+      "expected_type": {
+        "type": "string"
+      },
+      "expected_value": {
+        "type": "number"
+      },
+      "feature_name": {
+        "type": "string"
+      },
+      "suppressed": {
+        "type": "boolean"
+      },
+      "unit": {
+        "enum": [
+          "mm",
+          "cm",
+          "m",
+          "in",
+          "ft",
+          "deg",
+          "rad"
+        ],
+        "type": "string"
+      },
+      "value": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "feature_name",
+      "expected_type",
+      "configuration"
+    ],
+    "type": "object"
+  },
+  "insert_component": {
+    "properties": {
+      "configuration": {
+        "type": "string"
+      },
+      "filepath": {
+        "type": "string"
+      },
+      "place": {
+        "enum": [
+          "center",
+          "origin"
+        ],
+        "type": "string"
+      },
+      "x": {
+        "type": "number"
+      },
+      "y": {
+        "type": "number"
+      },
+      "z": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "filepath"
+    ],
+    "type": "object"
+  },
+  "insert_standard_part": {
+    "properties": {
+      "file": {
+        "type": "string"
+      },
+      "place": {
+        "enum": [
+          "center",
+          "origin"
+        ],
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "standard": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "x": {
+        "type": "number"
+      },
+      "y": {
+        "type": "number"
+      },
+      "z": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "standard"
+    ],
+    "type": "object"
+  }
+}

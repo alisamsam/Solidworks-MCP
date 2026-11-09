@@ -2,6 +2,13 @@
 
 > Automate SolidWorks using natural language through Claude AI and the Model Context Protocol (MCP)
 
+**For the original author:** this branch includes the full extended tool
+implementation and separate tests and examples. Start with the
+[author review package](UPSTREAM-SHARE.md), [test instructions](solidworks_mcp/tests/README.md)
+and [examples index](examples/README.md).
+The optional [mechanical-design skill concept](MECHANICAL-SKILL-CONCEPT.md)
+explains an approach to engineering-guided tool use, not an included skill.
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![SolidWorks 2025](https://img.shields.io/badge/SolidWorks-2023--2025-red.svg)](https://www.solidworks.com/)
@@ -23,7 +30,7 @@
 
 ## ✨ Features
 
-- ✅ **22 Tools** covering parts, sketches, features, and utilities
+- ✅ **Extensible tool catalog** covering parts, sketches, features, and utilities; use `get_capabilities` for the current list
 - ✅ **SolidWorks 2023–2025 Compatible** with version-aware API fallbacks
 - ✅ **Auto-detects SolidWorks** installation via Windows registry
 - ✅ **Multi-unit support** — mm, cm, inch, meter, foot
@@ -35,6 +42,21 @@
 ---
 
 ## 🛠️ Available Tools
+
+The table below lists core examples, not the complete current catalog.
+Before modeling, use `get_modeling_guide(topic="index")` to select an ordered
+workflow or an expert topic. The same read-only knowledge is available at
+`solidworks://guides/index`. It covers feature order, prerequisite checks,
+verification and currently advertised workflow tools without connecting to CAD.
+See [shared knowledge and verification](solidworks_mcp/knowledge/documentation/integration.md).
+
+A local parameter workspace now shares project owners, drafts, calculations
+and agent requests between the browser and MCP clients. Start it with the
+project Python environment: `python scripts/parameter_workspace.py --open`.
+The tools `read_parameter_workspace` and `write_parameter_workspace` access
+the same persistent register without a CAD connection. This first stage
+does not discover or mutate CAD dimensions; see the
+[current workspace capabilities](solidworks_mcp/knowledge/solidworks-2025-expert/references/parameter-workspace-operations.md).
 
 | Category | Tool | Description |
 |----------|------|-------------|
@@ -192,10 +214,21 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 ---
 
-## 👤 Author
+## 👤 Original author
 
 **Samsaam Ali Baig**
 - GitHub: [@alisamsam](https://github.com/alisamsam)
+
+Additional development by **PksOck**, originally on `additional-upgrades`
+and collected here on `upstream-share` for the original author's review.
+These changes have not been merged upstream.
+
+Not all tools have been thoroughly tested. Automated tests and selected live
+SolidWorks checks cover parts of the implementation, but do not establish that
+every tool works reliably across all supported versions, configurations and
+workflows. This remains work in progress, with room for bug fixes, broader
+testing and improvements. Review and test the tools in a disposable project
+before relying on them for production work. Feedback and contributions are welcome.
 
 ---
 

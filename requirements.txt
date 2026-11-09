@@ -3,10 +3,8 @@
 # Updated: 2026-01-22
 
 # MCP SDK
-mcp>=1.0.0
-
-# Async support
-asyncio-compat>=0.1.0
+mcp>=1.9,<1.10
+jsonschema>=4.26
 
 # Logging and utilities
 python-dotenv>=1.0.0
