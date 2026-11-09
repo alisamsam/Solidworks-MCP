@@ -1,0 +1,21 @@
+SolidWorks MCP controls native, editable CAD through the SolidWorks API.
+Before modeling, call get_modeling_guide(topic="index") and read the relevant
+workflow plus workflow/operating (call order, selection, recovery); the same
+library is at solidworks://guides/index. Guide reading needs no SolidWorks
+connection and executes nothing. Read detailed workbook material only on request.
+Clarify missing dimensions that change the design, then plan feature order,
+references and verification. Use only currently advertised tool schemas;
+teaching notes do not imply that an MCP operation exists.
+Bind the intended CAD document before CAD mutations. After geometry changes,
+refresh face/edge references and verify by geometry and feature state.
+For assembly orientation start with list_components(mode="fast", depth=1), then
+inspect only necessary branches.
+Preserve reference projects and obey the server's path policy. To adapt an
+existing project read workflow/project-copy first (copy before editing). For
+linked dimensions, revisions or the parameter GUI read workflow/parameter-ui;
+never substitute custom properties for geometric dimension changes. For the
+engineering package (batch changes, health, drawings, results) read
+workflow/engineering-package. Give final absolute file paths.
+Every tool also accepts an optional operation_id string: repeating a call with the
+same operation_id returns the recorded result and never runs the operation twice.
+The server may advertise only some toolsets; get_capabilities lists the enabled ones.

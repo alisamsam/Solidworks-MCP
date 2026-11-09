@@ -1,0 +1,7081 @@
+{
+  "add_drawing_dimension": {
+    "description": "Auto-dimension one drawing view with baseline dimensions and report the resulting dimension count. Modifies the active drawing.",
+    "inputSchema": {
+      "properties": {
+        "view_name": {
+          "description": "Drawing view name from list_drawing_views.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "view_name"
+      ],
+      "type": "object"
+    }
+  },
+  "add_equation": {
+    "description": "Add one named global variable with a text or numeric expression to the active document, then read the stored equation back to confirm it. Mutating.",
+    "inputSchema": {
+      "properties": {
+        "name": {
+          "description": "Global variable name, without the surrounding quotes, for example 'B'.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "solve": {
+          "default": true,
+          "description": "Solve the equation immediately. False delays evaluation until the model is rebuilt.",
+          "type": "boolean"
+        },
+        "value": {
+          "description": "Numeric value (number) or text value (string). A string is stored as a quoted text expression.",
+          "type": [
+            "number",
+            "string"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ],
+      "type": "object"
+    }
+  },
+  "add_mate": {
+    "description": "Add a mate of any common type (coincident, concentric, parallel, perpendicular, tangent, distance, angle, lock) between two components. Each reference is a face_index from list_component_faces, or the component's own plane/axis by name (stable, e.g. 'Front Plane', 'Axis1'). Verifies the created mate. Does not save.",
+    "inputSchema": {
+      "properties": {
+        "angle_deg": {
+          "type": "number"
+        },
+        "distance_mm": {
+          "type": "number"
+        },
+        "flip": {
+          "type": "boolean"
+        },
+        "mate_type": {
+          "enum": [
+            "angle",
+            "coincident",
+            "concentric",
+            "distance",
+            "lock",
+            "parallel",
+            "perpendicular",
+            "tangent"
+          ],
+          "type": "string"
+        },
+        "ref1": {
+          "properties": {
+            "axis": {
+              "type": "string"
+            },
+            "component": {
+              "type": "string"
+            },
+            "face_index": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "plane": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "component"
+          ],
+          "type": "object"
+        },
+        "ref2": {
+          "properties": {
+            "axis": {
+              "type": "string"
+            },
+            "component": {
+              "type": "string"
+            },
+            "face_index": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "plane": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "component"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "mate_type",
+        "ref1",
+        "ref2"
+      ],
+      "type": "object"
+    }
+  },
+  "add_sketch_dimension": {
+    "description": "Add a driving dimension to one or two entities of a named sketch, at the given label position, and optionally set its value. The dimension is committed with an immediate rebuild, so SolidWorks is never left waiting for a manual confirmation. Setting a value resizes the geometry; a dimension SolidWorks makes reference-only is reported as DRIVEN_DIMENSION.",
+    "inputSchema": {
+      "properties": {
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 2,
+          "minItems": 1,
+          "type": "array"
+        },
+        "sketch": {
+          "type": "string"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities",
+        "x",
+        "y"
+      ],
+      "type": "object"
+    }
+  },
+  "add_sketch_relation": {
+    "description": "Add one geometric relation (constraint) to entities inside a named sketch. Entities are given by their exact sketch names (Line1, Arc1, Point1) and are selected as segments or sketch points automatically. SolidWorks silently ignores a relation the geometry already satisfies, and that is reported as a failure. Relations: horizontal, vertical, tangent, parallel, perpendicular, coincident, concentric, symmetric, same_length, fixed, colinear.",
+    "inputSchema": {
+      "properties": {
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "relation": {
+          "enum": [
+            "coincident",
+            "colinear",
+            "concentric",
+            "fixed",
+            "horizontal",
+            "parallel",
+            "perpendicular",
+            "same_length",
+            "symmetric",
+            "tangent",
+            "vertical"
+          ],
+          "type": "string"
+        },
+        "sketch": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities",
+        "relation"
+      ],
+      "type": "object"
+    }
+  },
+  "add_standard_3_view": {
+    "description": "Add a standard 3-view (third-angle projection) of a model to the active drawing sheet. The model must already be open in SolidWorks. Modifies the active drawing.",
+    "inputSchema": {
+      "properties": {
+        "model_name": {
+          "description": "Title of the already-open model document (part/assembly), e.g. as shown by list_open_documents.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model_name"
+      ],
+      "type": "object"
+    }
+  },
+  "apply_fixed_fixture": {
+    "description": "Apply a fixed restraint to planar faces of the active part for a Simulation study and verify the restraint count and type.",
+    "inputSchema": {
+      "properties": {
+        "face_indices": {
+          "description": "Planar-face indices from list_planar_faces.",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "study": {
+          "description": "Study name; defaults to the newest study.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "face_indices"
+      ],
+      "type": "object"
+    }
+  },
+  "apply_force_load": {
+    "description": "Apply a normal force or a torque to planar faces of the active part and verify the load count, type and stored value. A force takes N, kN, kgf, kg or t; a torque takes N*m, kN*m, N*mm or kgf*m and needs a reference axis feature for the direction.",
+    "inputSchema": {
+      "properties": {
+        "face_indices": {
+          "description": "Planar-face indices from list_planar_faces.",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "load_type": {
+          "description": "force (default, normal to the faces) or torque.",
+          "enum": [
+            "force",
+            "torque"
+          ],
+          "type": "string"
+        },
+        "magnitude": {
+          "description": "Load magnitude, interpreted with unit.",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "reference": {
+          "description": "Name of an existing reference axis feature; required for a torque, ignored for a force.",
+          "type": "string"
+        },
+        "study": {
+          "description": "Study name; defaults to the newest study.",
+          "type": "string"
+        },
+        "unit": {
+          "description": "Force: N, kN, kgf are forces; kg and t are masses whose weight is used (m * 9.80665). Torque: N*m, kN*m, N*mm, kgf*m. Default N.",
+          "enum": [
+            "kg",
+            "kgf",
+            "kgf*m",
+            "kn",
+            "kn*m",
+            "n",
+            "n*m",
+            "n*mm",
+            "t"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "face_indices",
+        "magnitude"
+      ],
+      "type": "object"
+    }
+  },
+  "apply_material": {
+    "description": "Apply a named material from an absolute .sldmat database to the active part configuration and verify its mass and read-back.",
+    "inputSchema": {
+      "properties": {
+        "database": {
+          "description": "Absolute path to an installed .sldmat material database.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "database"
+      ],
+      "type": "object"
+    }
+  },
+  "apply_parameter_changes": {
+    "description": "Preflight every requested dimension on verified copies, then apply exact active-configuration changes; partial failures never imply rollback.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "changes": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "configuration": {
+                "type": "string"
+              },
+              "document_path": {
+                "type": "string"
+              },
+              "expected_value": {
+                "type": "number"
+              },
+              "name": {
+                "type": "string"
+              },
+              "unit": {
+                "type": "string"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "document_path",
+              "configuration",
+              "name",
+              "value",
+              "unit",
+              "expected_value"
+            ],
+            "type": "object"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "type": "array"
+        },
+        "root_document": {
+          "description": "Optional copied assembly to rebuild and save after its changed children.",
+          "type": "string"
+        },
+        "save": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "changes"
+      ],
+      "type": "object"
+    }
+  },
+  "apply_pressure_load": {
+    "description": "Apply a normal pressure to planar faces of the active part and verify the pressure is stored on a new load. Accepts Pa, kPa, MPa, N/mm2, bar, kgf/cm2, psi or ksi; the value is handed to the solver in N/mm2.",
+    "inputSchema": {
+      "properties": {
+        "face_indices": {
+          "description": "Planar-face indices from list_planar_faces.",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "magnitude": {
+          "description": "Pressure magnitude, interpreted with unit.",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "study": {
+          "description": "Study name; defaults to the newest study.",
+          "type": "string"
+        },
+        "unit": {
+          "description": "Pa, kPa, MPa, N/mm2, bar, kgf/cm2, psi or ksi. MPa and N/mm2 are the same unit. Default MPa.",
+          "enum": [
+            "MPa",
+            "N/mm2",
+            "N/mm\u00b2",
+            "Pa",
+            "bar",
+            "kPa",
+            "kgf/cm2",
+            "kpa",
+            "ksi",
+            "mpa",
+            "n/mm2",
+            "n/mm\u00b2",
+            "pa",
+            "psi"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "face_indices",
+        "magnitude"
+      ],
+      "type": "object"
+    }
+  },
+  "assembly_diff": {
+    "description": "Compare the active assembly's top-level components with an expected list and report missing, extra, moved and state-changed ones. Read-only; use it to find the minimal edit.",
+    "inputSchema": {
+      "properties": {
+        "expected": {
+          "items": {
+            "properties": {
+              "fixed": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "suppressed": {
+                "type": "boolean"
+              },
+              "translation_mm": {
+                "items": {
+                  "type": "number"
+                },
+                "maxItems": 3,
+                "minItems": 3,
+                "type": "array"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "ignore_extra": {
+          "default": false,
+          "type": "boolean"
+        },
+        "tolerance_mm": {
+          "default": 0.1,
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "expected"
+      ],
+      "type": "object"
+    }
+  },
+  "auto_balloon": {
+    "description": "Automatically add balloons to a drawing view, typically one per BOM/cut list row. Modifies the active drawing.",
+    "inputSchema": {
+      "properties": {
+        "ignore_multiple": {
+          "default": false,
+          "description": "When true, balloons only one instance of repeated components.",
+          "type": "boolean"
+        },
+        "layout": {
+          "default": 1,
+          "description": "Balloon layout value passed to the balloon options.",
+          "type": "integer"
+        },
+        "view_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "view_name"
+      ],
+      "type": "object"
+    }
+  },
+  "bind_active_document": {
+    "description": "Explicitly bind the current SolidWorks ActiveDoc and configuration as the target for subsequent mutating operations.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "boundary_boss": {
+    "description": "Create a boundary boss through two or three ordered profile sketches on the active part (one direction, no tangency conditions). Use exact sketch feature names.",
+    "inputSchema": {
+      "properties": {
+        "profile_sketches": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 3,
+          "minItems": 2,
+          "type": "array"
+        }
+      },
+      "required": [
+        "profile_sketches"
+      ],
+      "type": "object"
+    }
+  },
+  "boundary_cut": {
+    "description": "Cut a boundary shape through two or three ordered profile sketches from the active part (one direction, no tangency conditions).",
+    "inputSchema": {
+      "properties": {
+        "profile_sketches": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 3,
+          "minItems": 2,
+          "type": "array"
+        }
+      },
+      "required": [
+        "profile_sketches"
+      ],
+      "type": "object"
+    }
+  },
+  "build_manufacturing_package": {
+    "description": "Build a native copy, part cut-list or assembly occurrence BOM JSON, and selected STEP/STL/PDF/flat-DXF exports from an exact saved independent-copy document/configuration; report partial failures in a manifest.",
+    "inputSchema": {
+      "properties": {
+        "configuration": {
+          "type": "string"
+        },
+        "document_path": {
+          "type": "string"
+        },
+        "formats": {
+          "default": [
+            "step"
+          ],
+          "items": {
+            "enum": [
+              "step",
+              "stl",
+              "pdf",
+              "flat_dxf"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "output_folder": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_path",
+        "configuration",
+        "output_folder"
+      ],
+      "type": "object"
+    }
+  },
+  "capture_view": {
+    "description": "Capture the active model viewport as a revision-bound PNG and restore the original view afterwards. prepare_view=false captures the current view without activation, view changes or redraw, preserving native edit context. SolidWorks must remain at least partly visible.",
+    "inputSchema": {
+      "properties": {
+        "height": {
+          "default": 1080,
+          "maximum": 4096,
+          "minimum": 64,
+          "type": "integer"
+        },
+        "orientation": {
+          "default": "isometric",
+          "enum": [
+            "front",
+            "back",
+            "left",
+            "right",
+            "top",
+            "bottom",
+            "isometric",
+            "trimetric",
+            "dimetric"
+          ],
+          "type": "string"
+        },
+        "output_path": {
+          "description": "Optional new .png path; existing files are never overwritten.",
+          "type": "string"
+        },
+        "prepare_view": {
+          "default": true,
+          "type": "boolean"
+        },
+        "width": {
+          "default": 1920,
+          "maximum": 4096,
+          "minimum": 64,
+          "type": "integer"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "chamfer_edges": {
+    "description": "Angle/distance or two-distance chamfer; native geometry verified; no save.",
+    "inputSchema": {
+      "properties": {
+        "angle": {
+          "default": 45,
+          "description": "Degrees; angle_distance only",
+          "exclusiveMaximum": 90,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "chamfer_type": {
+          "default": "angle_distance",
+          "enum": [
+            "angle_distance",
+            "distance_distance"
+          ],
+          "type": "string"
+        },
+        "distance": {
+          "default": 2,
+          "description": "First distance",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "distance2": {
+          "description": "Required only for distance_distance",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "edge_indices": {
+          "description": "Fresh list_body_edges indexes; exclusive with edge_points.",
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 256,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "edge_points": {
+          "description": "[x,y,z] in unit; omit edge inputs for selection.",
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 3,
+            "minItems": 3,
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "flip_direction": {
+          "default": false,
+          "description": "Swap distance sides",
+          "type": "boolean"
+        },
+        "tangent_propagation": {
+          "default": true,
+          "type": "boolean"
+        },
+        "unit": {
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "check_interferences": {
+    "description": "Calculate active assembly interferences with current manager options; reports volumes and participating components and cleans up the manager. Does not infer engineering clearance.",
+    "inputSchema": {
+      "properties": {
+        "configuration": {
+          "description": "Expected active configuration",
+          "type": "string"
+        }
+      },
+      "required": [
+        "configuration"
+      ],
+      "type": "object"
+    }
+  },
+  "checkpoint_project": {
+    "description": "Create a verified independent saved-file checkpoint in a NEW approved folder. Unsaved source changes are rejected; no source save, overwrite or automatic activation.",
+    "inputSchema": {
+      "properties": {
+        "destination_folder": {
+          "type": "string"
+        },
+        "drawings": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "include_drawings": {
+          "default": true,
+          "type": "boolean"
+        },
+        "source_path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_path",
+        "destination_folder"
+      ],
+      "type": "object"
+    }
+  },
+  "circular_pattern": {
+    "description": "Pattern one named feature around one named reference axis using exact feature names.",
+    "inputSchema": {
+      "properties": {
+        "axis_feature": {
+          "type": "string"
+        },
+        "flip_direction": {
+          "default": false,
+          "type": "boolean"
+        },
+        "geometry_pattern": {
+          "default": true,
+          "type": "boolean"
+        },
+        "instances": {
+          "minimum": 2,
+          "type": "integer"
+        },
+        "seed_feature": {
+          "type": "string"
+        },
+        "total_angle_deg": {
+          "default": 360,
+          "exclusiveMinimum": 0,
+          "maximum": 360,
+          "type": "number"
+        }
+      },
+      "required": [
+        "seed_feature",
+        "axis_feature",
+        "instances"
+      ],
+      "type": "object"
+    }
+  },
+  "close_document": {
+    "description": "Close managed documents.",
+    "inputSchema": {
+      "properties": {
+        "recovery_script": {
+          "type": "string"
+        },
+        "save": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "close_saved_outputs": {
+    "description": "Close open documents that are saved, unmodified and inside the approved output roots, to slow graphics memory growth in a long session. Never closes unsaved, modified or user documents. Lists only unless confirm=true.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "confirm": {
+          "default": false,
+          "description": "True to close; false only lists.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "close_sketch": {
+    "description": "Close/exit the active sketch. Call this before extrude if sketch is still open.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "combine_bodies": {
+    "description": "Combine two overlapping solid bodies: add, subtract (target minus tool), or common.",
+    "inputSchema": {
+      "properties": {
+        "operation": {
+          "enum": [
+            "add",
+            "subtract",
+            "common"
+          ],
+          "type": "string"
+        },
+        "target_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "tool_index": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "target_index",
+        "tool_index",
+        "operation"
+      ],
+      "type": "object"
+    }
+  },
+  "compare_project_versions": {
+    "description": "Compare saved bytes, membership and manifest source hashes in two verified copied projects. Maps documents by source lineage. Optional model inspection compares active-configuration drivers/material/mass in saved copied models. No geometric equivalence claim.",
+    "inputSchema": {
+      "properties": {
+        "include_model_parameters": {
+          "default": false,
+          "type": "boolean"
+        },
+        "left_folder": {
+          "type": "string"
+        },
+        "right_folder": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "left_folder",
+        "right_folder"
+      ],
+      "type": "object"
+    }
+  },
+  "connect_solidworks": {
+    "description": "Connect to SolidWorks. Launches if not running.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "convert_entities": {
+    "description": "Convert model geometry into the active sketch (Convert Entities). Give the points that lie on the faces or edges to convert, or use the current selection; the active sketch must be open for editing. SolidWorks silently rejects a selection it cannot convert and clears it, so success is proven by the sketch gaining segments. One face or a few coherent edges convert reliably; converting every edge of a body at once does not.",
+    "inputSchema": {
+      "properties": {
+        "chain": {
+          "default": false,
+          "type": "boolean"
+        },
+        "edges": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 3,
+            "minItems": 3,
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "faces": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 3,
+            "minItems": 3,
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "use_selection": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "copy_project": {
+    "description": "Copy all reachable native CAD dependencies into a NEW approved folder, relink only closed copies, and verify isolation. Never saves source files. Discover related drawings in the source folder; pass external drawings explicitly. Use source_state=saved_files only when explicitly choosing disk state; unsaved edits are excluded. Does not open the copy or copy arbitrary auxiliary files.",
+    "inputSchema": {
+      "properties": {
+        "destination_folder": {
+          "type": "string"
+        },
+        "drawings": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "include_drawings": {
+          "default": true,
+          "type": "boolean"
+        },
+        "source_path": {
+          "type": "string"
+        },
+        "source_state": {
+          "default": "require_clean",
+          "enum": [
+            "require_clean",
+            "saved_files"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_path",
+        "destination_folder"
+      ],
+      "type": "object"
+    }
+  },
+  "create_3d_sketch": {
+    "description": "Start a new 3D sketch. Nothing has to be selected; the sketch is created and left open for editing. In a 3D sketch the points passed to the drawing tools are world coordinates (x, y, z) instead of coordinates in a sketch plane.",
+    "inputSchema": {
+      "properties": {
+        "exact_geometry": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "create_centered_profile_sketch": {
+    "description": "Create a new scratch part with an exact translated line/arc profile sketch, using database insertion to avoid inference. Requires complete planar sketch evidence; does not alter existing parts or save/install a library profile.",
+    "inputSchema": {
+      "properties": {
+        "geometry": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "geometry"
+      ],
+      "type": "object"
+    }
+  },
+  "create_component_pattern": {
+    "description": "Create a linear or circular component pattern of one top-level seed component. reference is the direction (linear) or axis (circular): a component's face_index from list_component_faces (planar face / cylindrical face), or its plane/axis by name. linear: spacing_mm. circular: angle_deg (total angle when equal_spacing, else the step). Verifies feature, count and new components. Does not save.",
+    "inputSchema": {
+      "properties": {
+        "angle_deg": {
+          "type": "number"
+        },
+        "count": {
+          "maximum": 1000,
+          "minimum": 2,
+          "type": "integer"
+        },
+        "equal_spacing": {
+          "type": "boolean"
+        },
+        "pattern_type": {
+          "enum": [
+            "circular",
+            "linear"
+          ],
+          "type": "string"
+        },
+        "reference": {
+          "properties": {
+            "axis": {
+              "type": "string"
+            },
+            "component": {
+              "type": "string"
+            },
+            "face_index": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "plane": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "component"
+          ],
+          "type": "object"
+        },
+        "reverse": {
+          "type": "boolean"
+        },
+        "seed_component": {
+          "type": "string"
+        },
+        "spacing_mm": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "pattern_type",
+        "seed_component",
+        "reference",
+        "count"
+      ],
+      "type": "object"
+    }
+  },
+  "create_configuration": {
+    "description": "Add a named configuration to the active document (never overwrites) and read it back. Mutating.",
+    "inputSchema": {
+      "properties": {
+        "activate": {
+          "default": false,
+          "description": "Activate and verify",
+          "type": "boolean"
+        },
+        "alternate_name": {
+          "default": "",
+          "description": "Stored only with option bit 1 (UseAlternateName)",
+          "type": "string"
+        },
+        "comment": {
+          "default": "",
+          "description": "Configuration Properties comment",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "description": "Configuration description",
+          "type": "string"
+        },
+        "name": {
+          "description": "New configuration name",
+          "minLength": 1,
+          "type": "string"
+        },
+        "options": {
+          "default": 0,
+          "description": "swConfigurationOptions2_e bitmask; +128 keeps the active configuration",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "parent_configuration": {
+          "default": "",
+          "description": "Derive from; omit for top level",
+          "type": "string"
+        },
+        "rebuild": {
+          "default": false,
+          "description": "Rebuild after adding",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    }
+  },
+  "create_coordinate_system": {
+    "description": "Create a named coordinate system at a numeric origin offset with an optional XYZ rotation of the part axes.",
+    "inputSchema": {
+      "properties": {
+        "angle_unit": {
+          "default": "deg",
+          "enum": [
+            "deg",
+            "rad"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "description": "Optional feature name; defaults to SolidWorks' own name.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "rotate_x": {
+          "default": 0,
+          "type": "number"
+        },
+        "rotate_y": {
+          "default": 0,
+          "type": "number"
+        },
+        "rotate_z": {
+          "default": 0,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x_offset": {
+          "default": 0,
+          "type": "number"
+        },
+        "y_offset": {
+          "default": 0,
+          "type": "number"
+        },
+        "z_offset": {
+          "default": 0,
+          "type": "number"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "create_cosmetic_weld_bead": {
+    "description": "Create a cosmetic weld bead along a path of edges in the active part (InsertCosmeticWeldBead2, weld-path mode). Cosmetic beads are drawing annotations: they add no solid material, so success is proven by the persistent CosmeticWeldBead feature and its recorded total weld length, not by a volume change. Use edge indices from list_body_edges. Select several edges of one loop to weld all the way around. Modifies the active part.",
+    "inputSchema": {
+      "properties": {
+        "edge_indices": {
+          "description": "Edge indices from list_body_edges, in path order",
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "size_mm": {
+          "default": 4.0,
+          "description": "Weld bead leg size in millimetres",
+          "minimum": 0.001,
+          "type": "number"
+        }
+      },
+      "required": [
+        "edge_indices"
+      ],
+      "type": "object"
+    }
+  },
+  "create_documentation_drawing": {
+    "description": "Create a NEW isolated model graph and native/PDF three-view drawing draft from an exact clean saved active part or assembly. Explicit first/third angle projection, copied model/configuration references and saved drawing readback verified; draft heading mandatory. No full dimensioning, BOM, welding/installation engineering or production release. Closes own documents, restores source.",
+    "inputSchema": {
+      "properties": {
+        "configuration": {
+          "type": "string"
+        },
+        "document_path": {
+          "type": "string"
+        },
+        "output_folder": {
+          "type": "string"
+        },
+        "projection": {
+          "default": "first_angle",
+          "enum": [
+            "first_angle",
+            "third_angle"
+          ],
+          "type": "string"
+        },
+        "template_path": {
+          "description": "Existing .drwdot; omit for installed drawing template (draft only).",
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_path",
+        "configuration",
+        "output_folder"
+      ],
+      "type": "object"
+    }
+  },
+  "create_edge_flange": {
+    "description": "Add an edge flange to an existing sheet-metal body: the flange grows from one straight edge of the sheet, over a bend, for the given length at the given angle. Use the edge index from list_body_edges; the edge must belong to a sheet-metal body, because the flange bends the sheet rather than adding a separate solid. Success is only reported when the sheet gains the flange's material and the face count grows. Modifies the active part.",
+    "inputSchema": {
+      "properties": {
+        "angle_deg": {
+          "default": 90.0,
+          "description": "Bend angle between the sheet and the flange",
+          "exclusiveMaximum": 180,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "bend_radius_mm": {
+          "description": "Inside bend radius; omit to use the sheet's own default radius",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "edge_index": {
+          "description": "Bend-line edge index from list_body_edges",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "length_mm": {
+          "description": "Flange length past the bend line",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "edge_index",
+        "length_mm"
+      ],
+      "type": "object"
+    }
+  },
+  "create_miter_flange": {
+    "description": "Create a miter flange on one straight sheet-metal edge using an existing, CLOSED, four-segment open profile sketch. Draw the profile on a plane normal to the edge, starting exactly at the edge, and pass its feature name together with an edge index from list_body_edges. The profile controls the bends and lengths; no flange length is inferred. Only the four-segment profile/default bend settings have been live-verified. Modifies the active part.",
+    "inputSchema": {
+      "properties": {
+        "edge_index": {
+          "description": "Edge index from list_body_edges",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "sketch_name": {
+          "description": "Feature name of the closed profile sketch",
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "edge_index",
+        "sketch_name"
+      ],
+      "type": "object"
+    }
+  },
+  "create_new_assembly": {
+    "description": "Create a new assembly document.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "create_new_part": {
+    "description": "Create a new part document.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "create_persistent_reference": {
+    "description": "Create and immediately resolve a document/configuration-bound persistent reference to one exact existing feature. Returns portable base64 bytes; no CAD save.",
+    "inputSchema": {
+      "properties": {
+        "configuration": {
+          "description": "Expected active configuration",
+          "type": "string"
+        },
+        "feature_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "feature_name",
+        "configuration"
+      ],
+      "type": "object"
+    }
+  },
+  "create_reference_axis": {
+    "description": "Create an axis along the intersection of two distinct, exactly named planes.",
+    "inputSchema": {
+      "properties": {
+        "first_plane": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "second_plane": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "first_plane",
+        "second_plane"
+      ],
+      "type": "object"
+    }
+  },
+  "create_reference_plane": {
+    "description": "Create an offset reference plane from one exactly named existing plane.",
+    "inputSchema": {
+      "properties": {
+        "base_plane": {
+          "description": "Exact plane name from list_planes.",
+          "type": "string"
+        },
+        "offset": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "reverse_direction": {
+          "default": false,
+          "type": "boolean"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "base_plane",
+        "offset"
+      ],
+      "type": "object"
+    }
+  },
+  "create_sheet_metal_base_flange": {
+    "description": "Create a base flange from the last sketch. new_body=true adds a separate sheet body to an existing sheet-metal part and verifies existing solids unchanged. Closed sketch sets outline; width_mm applies to open profiles. Not saved.",
+    "inputSchema": {
+      "properties": {
+        "bend_radius_mm": {
+          "description": "Default bend radius in mm. Defaults to the thickness.",
+          "type": "number"
+        },
+        "new_body": {
+          "default": false,
+          "description": "Explicitly add a body to existing sheet metal; use a fresh separate sketch.",
+          "type": "boolean"
+        },
+        "thickness_mm": {
+          "description": "Sheet thickness in mm.",
+          "type": "number"
+        },
+        "width_mm": {
+          "default": 50.0,
+          "description": "Width for open profiles, split across the sketch plane.",
+          "type": "number"
+        }
+      },
+      "required": [
+        "thickness_mm"
+      ],
+      "type": "object"
+    }
+  },
+  "create_sheet_metal_hem": {
+    "description": "Add an open or closed hem to one straight edge. Folded single-body sheet only; inside position, parent bend allowance/relief. Not saved.",
+    "inputSchema": {
+      "properties": {
+        "edge_index": {
+          "description": "Fresh list_body_edges index.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "gap_mm": {
+          "description": "Open only; default 1 mm. Omit for closed.",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "hem_type": {
+          "default": "open",
+          "enum": [
+            "open",
+            "closed"
+          ],
+          "type": "string"
+        },
+        "length_mm": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "miter_gap_mm": {
+          "default": 1.0,
+          "minimum": 0,
+          "type": "number"
+        },
+        "reverse": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "edge_index",
+        "length_mm"
+      ],
+      "type": "object"
+    }
+  },
+  "create_sketch": {
+    "description": "Create a new sketch on a plane.",
+    "inputSchema": {
+      "properties": {
+        "exact_geometry": {
+          "default": false,
+          "description": "Disable automatic sketch relations and snapping for exact programmatic geometry",
+          "type": "boolean"
+        },
+        "plane": {
+          "default": "Front",
+          "description": "Plane to sketch on",
+          "enum": [
+            "Front",
+            "Top",
+            "Right"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "create_sketch_on_face": {
+    "description": "Create a new sketch on an existing body face (by 3D coordinates). Use for cut-extrude on faces instead of reference planes.",
+    "inputSchema": {
+      "properties": {
+        "exact_geometry": {
+          "default": false,
+          "description": "Disable automatic sketch relations and snapping for exact programmatic geometry",
+          "type": "boolean"
+        },
+        "unit": {
+          "description": "Unit; omitted = session default (set_units)",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x": {
+          "default": 0,
+          "description": "X coordinate on the face",
+          "type": "number"
+        },
+        "y": {
+          "default": 0,
+          "description": "Y coordinate on the face",
+          "type": "number"
+        },
+        "z": {
+          "default": 0,
+          "description": "Z coordinate on the face",
+          "type": "number"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "create_sketch_on_planar_face": {
+    "description": "Create a sketch on the exact native planar face index from list_planar_faces. Avoids ambiguous coordinate selection.",
+    "inputSchema": {
+      "properties": {
+        "exact_geometry": {
+          "default": false,
+          "type": "boolean"
+        },
+        "face_index": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "face_index"
+      ],
+      "type": "object"
+    }
+  },
+  "create_sketch_on_plane": {
+    "description": "Start a new 2D sketch on any named plane that exists in the part: a standard plane (Front Plane, Top Plane, Right Plane, or the shorthands Front/Top/Right) or a reference plane such as Plane1. The sketch is created and left open for editing, and its feature name is returned.",
+    "inputSchema": {
+      "properties": {
+        "exact_geometry": {
+          "default": false,
+          "type": "boolean"
+        },
+        "plane": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "plane"
+      ],
+      "type": "object"
+    }
+  },
+  "create_static_study": {
+    "description": "Create a SOLIDWORKS Simulation static study on the active part and verify it through the study manager. With mesh_type 'solid' (the default) beam bodies of a weldment part are converted to solid bodies, because a beam study needs joints before it can be meshed.",
+    "inputSchema": {
+      "properties": {
+        "mesh_type": {
+          "description": "Study mesh type; default 'solid'.",
+          "enum": [
+            "solid",
+            "beam"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    }
+  },
+  "create_structural_member": {
+    "description": "Weldment structural member from a named sketch's segments and a library profile; connected segments share a group (optional miters). Modifies the active part.",
+    "inputSchema": {
+      "properties": {
+        "allow_protrusion": {
+          "default": true,
+          "type": "boolean"
+        },
+        "connected_segments_option": {
+          "default": 1,
+          "description": "0=None, 1=Apply, 2=Apply for all (default 1)",
+          "type": "integer"
+        },
+        "corner_type": {
+          "default": "none",
+          "description": "Corner of connected segments; miter or none (default)",
+          "enum": [
+            "none",
+            "miter"
+          ],
+          "type": "string"
+        },
+        "group_mode": {
+          "default": "auto",
+          "description": "auto (default) | all (one group) | per_segment",
+          "enum": [
+            "auto",
+            "all",
+            "per_segment"
+          ],
+          "type": "string"
+        },
+        "profile_path": {
+          "description": "Path to a .sldlfp, from list_weldment_profiles",
+          "type": "string"
+        },
+        "segment_indices": {
+          "description": "Omit for all segments",
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "separate_groups": {
+          "default": false,
+          "description": "One group per segment (default false)",
+          "type": "boolean"
+        },
+        "sketch_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch_name",
+        "profile_path"
+      ],
+      "type": "object"
+    }
+  },
+  "create_tab_and_slot": {
+    "description": "Tab and Slot joining two bodies: tab grows from one body's edge (list_body_edges), slot is cut in the other body's face (list_planar_faces). Modifies the active part.",
+    "inputSchema": {
+      "properties": {
+        "edge_treatment": {
+          "default": "sharp",
+          "enum": [
+            "sharp",
+            "fillet",
+            "chamfer"
+          ],
+          "type": "string"
+        },
+        "edge_treatment_mm": {
+          "default": 1.0,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "end_offset_mm": {
+          "default": 0.0,
+          "minimum": 0,
+          "type": "number"
+        },
+        "instances": {
+          "default": 1,
+          "description": "When spacing is 'equal'",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "offset_from_edges": {
+          "default": false,
+          "type": "boolean"
+        },
+        "slot_clearance_mm": {
+          "default": 0.2,
+          "minimum": 0,
+          "type": "number"
+        },
+        "slot_face_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "spacing": {
+          "default": "single",
+          "enum": [
+            "single",
+            "equal",
+            "length"
+          ],
+          "type": "string"
+        },
+        "spacing_mm": {
+          "description": "When spacing is 'length'",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "start_offset_mm": {
+          "default": 0.0,
+          "minimum": 0,
+          "type": "number"
+        },
+        "tab_edge_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "tab_face_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "tab_height_mm": {
+          "default": 6.0,
+          "description": "Protrusion; use the wall thickness for tubes",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "tab_length_mm": {
+          "default": 10.0,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "tab_thickness_mm": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "tab_edge_index",
+        "slot_face_index"
+      ],
+      "type": "object"
+    }
+  },
+  "create_weldment_end_cap": {
+    "description": "Cap the cut end of a hollow weldment member (EndCap). Auto-detects ends unless face_indices are given. Reports volume before and after. Modifies the active part.",
+    "inputSchema": {
+      "properties": {
+        "body_name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "chamfer": {
+          "default": false,
+          "type": "boolean"
+        },
+        "chamfer_mm": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "corner_treatment": {
+          "default": false,
+          "type": "boolean"
+        },
+        "depth_mm": {
+          "default": 5.0,
+          "minimum": 0.001,
+          "type": "number"
+        },
+        "direction": {
+          "default": "inward",
+          "description": "inward (flush, default), outward (protruding) or inset",
+          "enum": [
+            "inward",
+            "outward",
+            "inset"
+          ],
+          "type": "string"
+        },
+        "face_indices": {
+          "description": "From list_planar_faces; omit to auto-detect",
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "given_offset": {
+          "default": false,
+          "description": "true: offset_value_mm; false: wall_thickness_ratio",
+          "type": "boolean"
+        },
+        "inset_mm": {
+          "default": 2.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "offset_value_mm": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "reverse": {
+          "default": false,
+          "type": "boolean"
+        },
+        "wall_thickness_ratio": {
+          "default": 0.6,
+          "minimum": 0.01,
+          "type": "number"
+        }
+      },
+      "required": [
+        "body_name"
+      ],
+      "type": "object"
+    }
+  },
+  "create_weldment_gusset": {
+    "description": "Gusset plate between two faces (list_planar_faces) of different solid members that meet at a real edge. Reports volume before and after. Modifies the active part.",
+    "inputSchema": {
+      "properties": {
+        "angle_deg": {
+          "default": 45.0,
+          "exclusiveMaximum": 180,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "chamfer": {
+          "default": false,
+          "type": "boolean"
+        },
+        "chamfer1_mm": {
+          "default": 12.5,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "chamfer2_mm": {
+          "default": 12.5,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "chamfer_angle_deg": {
+          "default": 45.0,
+          "exclusiveMaximum": 180,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "crv_index": {
+          "default": 0,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "depth_mm": {
+          "default": 5.0,
+          "minimum": 0.001,
+          "type": "number"
+        },
+        "direction": {
+          "default": "both",
+          "enum": [
+            "both",
+            "inner",
+            "outer"
+          ],
+          "type": "string"
+        },
+        "face_a_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "face_b_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "leg1_mm": {
+          "default": 25.0,
+          "minimum": 0.001,
+          "type": "number"
+        },
+        "leg2_mm": {
+          "default": 25.0,
+          "minimum": 0.001,
+          "type": "number"
+        },
+        "leg3_mm": {
+          "default": 15.0,
+          "minimum": 0.001,
+          "type": "number"
+        },
+        "leg4_mm": {
+          "default": 15.0,
+          "minimum": 0.001,
+          "type": "number"
+        },
+        "location": {
+          "default": "center",
+          "enum": [
+            "center",
+            "start",
+            "end"
+          ],
+          "type": "string"
+        },
+        "offset": {
+          "default": false,
+          "type": "boolean"
+        },
+        "offset_mm": {
+          "default": 5.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "profile": {
+          "default": "triangle",
+          "enum": [
+            "triangle",
+            "polygon"
+          ],
+          "type": "string"
+        },
+        "reverse_dir": {
+          "default": false,
+          "type": "boolean"
+        },
+        "reverse_face": {
+          "default": false,
+          "type": "boolean"
+        },
+        "use_length_dim": {
+          "default": false,
+          "type": "boolean"
+        },
+        "use_length_dim_for_chamfer": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "face_a_index",
+        "face_b_index"
+      ],
+      "type": "object"
+    }
+  },
+  "cut_extrude": {
+    "description": "Cut extrude to remove material.",
+    "inputSchema": {
+      "properties": {
+        "both_directions": {
+          "default": false,
+          "description": "Cut both directions",
+          "type": "boolean"
+        },
+        "depth": {
+          "default": 10,
+          "description": "Cut depth",
+          "type": "number"
+        },
+        "flip_direction": {
+          "description": "Explicit cut direction; omit to retry the opposite direction automatically",
+          "type": "boolean"
+        },
+        "through_all": {
+          "default": false,
+          "description": "Cut through all",
+          "type": "boolean"
+        },
+        "unit": {
+          "description": "Unit; omitted = session default (set_units)",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "cut_with_surface": {
+    "description": "Remove one side of a solid using a named planar sheet surface.",
+    "inputSchema": {
+      "properties": {
+        "flip": {
+          "default": false,
+          "type": "boolean"
+        },
+        "surface_name": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "surface_name"
+      ],
+      "type": "object"
+    }
+  },
+  "delete_body": {
+    "description": "Delete a selected solid body or keep only that body in a multibody part.",
+    "inputSchema": {
+      "properties": {
+        "body_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "keep_only": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "body_index"
+      ],
+      "type": "object"
+    }
+  },
+  "delete_mate": {
+    "description": "Delete one mate of the active assembly by exact feature name. Requires its current type (from list_mates) to guard against stale names. Verifies the mate is gone. Does not save.",
+    "inputSchema": {
+      "properties": {
+        "expected_type": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "mate_name": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "mate_name",
+        "expected_type"
+      ],
+      "type": "object"
+    }
+  },
+  "delete_sketch_relations": {
+    "description": "Delete relations from a named sketch: all of them, or every relation of one type. Success is confirmed by the relation list changing.",
+    "inputSchema": {
+      "properties": {
+        "all": {
+          "default": false,
+          "type": "boolean"
+        },
+        "relation": {
+          "enum": [
+            "coincident",
+            "colinear",
+            "concentric",
+            "fixed",
+            "horizontal",
+            "parallel",
+            "perpendicular",
+            "same_length",
+            "symmetric",
+            "tangent",
+            "vertical"
+          ],
+          "type": "string"
+        },
+        "sketch": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch"
+      ],
+      "type": "object"
+    }
+  },
+  "dome": {
+    "description": "Raise a dome from a planar face of the active solid part.",
+    "inputSchema": {
+      "properties": {
+        "elliptical": {
+          "default": false,
+          "type": "boolean"
+        },
+        "face_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "height": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "face_index",
+        "height"
+      ],
+      "type": "object"
+    }
+  },
+  "draft_faces": {
+    "description": "Draft planar faces of the active part about a planar neutral face. Face indices come from list_planar_faces on the current model state (identify faces by area and point, not only by normal). angle is in degrees; flip reverses the draft direction.",
+    "inputSchema": {
+      "properties": {
+        "angle": {
+          "exclusiveMaximum": 90,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "draft_face_indices": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "flip": {
+          "default": false,
+          "type": "boolean"
+        },
+        "neutral_face_index": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "angle",
+        "neutral_face_index",
+        "draft_face_indices"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_arc": {
+    "description": "Draw an arc by center and angles, counter-clockwise from start_angle to end_angle.",
+    "inputSchema": {
+      "properties": {
+        "cx": {
+          "default": 0,
+          "description": "Center X",
+          "type": "number"
+        },
+        "cy": {
+          "default": 0,
+          "description": "Center Y",
+          "type": "number"
+        },
+        "end_angle": {
+          "default": 90,
+          "description": "End angle (degrees)",
+          "type": "number"
+        },
+        "radius": {
+          "default": 25,
+          "description": "Radius",
+          "type": "number"
+        },
+        "start_angle": {
+          "default": 0,
+          "description": "Start angle (degrees)",
+          "type": "number"
+        },
+        "unit": {
+          "description": "Unit; omitted = session default (set_units)",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "draw_arc_3point": {
+    "description": "Draw an arc from a start point to an end point through a third point.",
+    "inputSchema": {
+      "properties": {
+        "end_x": {
+          "type": "number"
+        },
+        "end_y": {
+          "type": "number"
+        },
+        "point_x": {
+          "type": "number"
+        },
+        "point_y": {
+          "type": "number"
+        },
+        "start_x": {
+          "type": "number"
+        },
+        "start_y": {
+          "type": "number"
+        },
+        "unit": {
+          "description": "Unit; omitted = session default (set_units)",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "start_x",
+        "start_y",
+        "end_x",
+        "end_y",
+        "point_x",
+        "point_y"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_arc_slot": {
+    "description": "Draw an arc slot from an arc center, an arc start point and an arc end point, plus the slot width.",
+    "inputSchema": {
+      "properties": {
+        "center_x": {
+          "type": "number"
+        },
+        "center_y": {
+          "type": "number"
+        },
+        "end_x": {
+          "type": "number"
+        },
+        "end_y": {
+          "type": "number"
+        },
+        "start_x": {
+          "type": "number"
+        },
+        "start_y": {
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "width": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "center_x",
+        "center_y",
+        "start_x",
+        "start_y",
+        "end_x",
+        "end_y",
+        "width"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_arc_slot_3point": {
+    "description": "Draw a 3-point arc slot through three points on the slot centerline, plus the slot width.",
+    "inputSchema": {
+      "properties": {
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "width": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "x1": {
+          "type": "number"
+        },
+        "x2": {
+          "type": "number"
+        },
+        "x3": {
+          "type": "number"
+        },
+        "y1": {
+          "type": "number"
+        },
+        "y2": {
+          "type": "number"
+        },
+        "y3": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x1",
+        "y1",
+        "x2",
+        "y2",
+        "x3",
+        "y3",
+        "width"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_center_rectangle": {
+    "description": "Draw a center-to-corner rectangle from its center, width and height.",
+    "inputSchema": {
+      "properties": {
+        "cx": {
+          "default": 0,
+          "type": "number"
+        },
+        "cy": {
+          "default": 0,
+          "type": "number"
+        },
+        "height": {
+          "default": 25,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "width": {
+          "default": 50,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "width",
+        "height"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_centerline": {
+    "description": "Draw a centerline in the active sketch. Centerlines are construction geometry and are the usual revolve axis.",
+    "inputSchema": {
+      "properties": {
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x1": {
+          "default": 0,
+          "type": "number"
+        },
+        "x2": {
+          "default": 0,
+          "type": "number"
+        },
+        "y1": {
+          "default": -50,
+          "type": "number"
+        },
+        "y2": {
+          "default": 50,
+          "type": "number"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "draw_circle": {
+    "description": "Draw a circle in the active sketch.",
+    "inputSchema": {
+      "properties": {
+        "radius": {
+          "default": 25,
+          "description": "Radius",
+          "type": "number"
+        },
+        "unit": {
+          "description": "Unit; omitted = session default (set_units)",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x": {
+          "default": 0,
+          "description": "Center X",
+          "type": "number"
+        },
+        "y": {
+          "default": 0,
+          "description": "Center Y",
+          "type": "number"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "draw_circle_radius": {
+    "description": "Draw a circle from its center and an exact radius. Use this instead of draw_circle when the radius is known and no edge point is needed.",
+    "inputSchema": {
+      "properties": {
+        "cx": {
+          "default": 0,
+          "type": "number"
+        },
+        "cy": {
+          "default": 0,
+          "type": "number"
+        },
+        "radius": {
+          "default": 25,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "radius"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_ellipse": {
+    "description": "Draw a full ellipse from center, major radius, minor radius and an optional in-plane rotation.",
+    "inputSchema": {
+      "properties": {
+        "cx": {
+          "default": 0,
+          "type": "number"
+        },
+        "cy": {
+          "default": 0,
+          "type": "number"
+        },
+        "major_radius": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "minor_radius": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "rotation_deg": {
+          "default": 0,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "major_radius",
+        "minor_radius"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_elliptical_arc": {
+    "description": "Draw a partial elliptical arc between two parametric angles of an ellipse defined by center, radii and in-plane rotation.",
+    "inputSchema": {
+      "properties": {
+        "counter_clockwise": {
+          "default": true,
+          "type": "boolean"
+        },
+        "cx": {
+          "default": 0,
+          "type": "number"
+        },
+        "cy": {
+          "default": 0,
+          "type": "number"
+        },
+        "end_angle_deg": {
+          "exclusiveMinimum": 0,
+          "maximum": 360,
+          "type": "number"
+        },
+        "major_radius": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "minor_radius": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "rotation_deg": {
+          "default": 0,
+          "type": "number"
+        },
+        "start_angle_deg": {
+          "default": 0,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "major_radius",
+        "minor_radius",
+        "end_angle_deg"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_equation_curve": {
+    "description": "Draw an equation-driven curve y = f(x) in the active sketch. The expression uses x and is evaluated in the document's linear unit; SolidWorks keeps it as a closed-form spline. range_start and range_end are given in the requested unit and converted to the document unit, while the offsets are applied in the sketch plane. A positive rotation turns the curve counter-clockwise about the sketch origin.",
+    "inputSchema": {
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "lock_end": {
+          "default": false,
+          "type": "boolean"
+        },
+        "lock_start": {
+          "default": false,
+          "type": "boolean"
+        },
+        "range_end": {
+          "type": "number"
+        },
+        "range_start": {
+          "type": "number"
+        },
+        "rotation_deg": {
+          "default": 0,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x_offset": {
+          "default": 0,
+          "type": "number"
+        },
+        "y_offset": {
+          "default": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "expression",
+        "range_start",
+        "range_end"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_equation_curve_3d": {
+    "description": "Draw a parametric equation-driven curve x(t), y(t), z(t) in the active 3D sketch (start one with create_3d_sketch). The expressions use t, which runs from range_start to range_end, and give coordinates in the requested unit. The offsets move the curve in X and Y and a positive rotation turns it counter-clockwise about Z.",
+    "inputSchema": {
+      "properties": {
+        "lock_end": {
+          "default": false,
+          "type": "boolean"
+        },
+        "lock_start": {
+          "default": false,
+          "type": "boolean"
+        },
+        "range_end": {
+          "type": "number"
+        },
+        "range_start": {
+          "type": "number"
+        },
+        "rotation_deg": {
+          "default": 0,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x_expression": {
+          "type": "string"
+        },
+        "x_offset": {
+          "default": 0,
+          "type": "number"
+        },
+        "y_expression": {
+          "type": "string"
+        },
+        "y_offset": {
+          "default": 0,
+          "type": "number"
+        },
+        "z_expression": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "x_expression",
+        "y_expression",
+        "z_expression",
+        "range_start",
+        "range_end"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_line": {
+    "description": "Draw a line in the active sketch.",
+    "inputSchema": {
+      "properties": {
+        "unit": {
+          "description": "Unit; omitted = session default (set_units)",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x1": {
+          "default": 0,
+          "description": "Start X",
+          "type": "number"
+        },
+        "x2": {
+          "default": 100,
+          "description": "End X",
+          "type": "number"
+        },
+        "y1": {
+          "default": 0,
+          "description": "Start Y",
+          "type": "number"
+        },
+        "y2": {
+          "default": 0,
+          "description": "End Y",
+          "type": "number"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "draw_line_3d": {
+    "description": "Draw a straight line with explicit XYZ endpoints in the active 3D sketch. Coordinates are in the part model frame.",
+    "inputSchema": {
+      "properties": {
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x1": {
+          "type": "number"
+        },
+        "x2": {
+          "type": "number"
+        },
+        "y1": {
+          "type": "number"
+        },
+        "y2": {
+          "type": "number"
+        },
+        "z1": {
+          "type": "number"
+        },
+        "z2": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x1",
+        "y1",
+        "z1",
+        "x2",
+        "y2",
+        "z2"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_parabola": {
+    "description": "Draw a parabolic segment from a focus, an apex and the two end points on the curve.",
+    "inputSchema": {
+      "properties": {
+        "apex_x": {
+          "type": "number"
+        },
+        "apex_y": {
+          "type": "number"
+        },
+        "end_x": {
+          "type": "number"
+        },
+        "end_y": {
+          "type": "number"
+        },
+        "focus_x": {
+          "type": "number"
+        },
+        "focus_y": {
+          "type": "number"
+        },
+        "start_x": {
+          "type": "number"
+        },
+        "start_y": {
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "focus_x",
+        "focus_y",
+        "apex_x",
+        "apex_y",
+        "start_x",
+        "start_y",
+        "end_x",
+        "end_y"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_parallelogram": {
+    "description": "Draw a parallelogram through three ordered corner points.",
+    "inputSchema": {
+      "properties": {
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x1": {
+          "type": "number"
+        },
+        "x2": {
+          "type": "number"
+        },
+        "x3": {
+          "type": "number"
+        },
+        "y1": {
+          "type": "number"
+        },
+        "y2": {
+          "type": "number"
+        },
+        "y3": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x1",
+        "y1",
+        "x2",
+        "y2",
+        "x3",
+        "y3"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_point": {
+    "description": "Draw a sketch point in the active sketch.",
+    "inputSchema": {
+      "properties": {
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x": {
+          "default": 0,
+          "type": "number"
+        },
+        "y": {
+          "default": 0,
+          "type": "number"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "draw_polygon": {
+    "description": "Draw a regular polygon.",
+    "inputSchema": {
+      "properties": {
+        "cx": {
+          "default": 0,
+          "description": "Center X",
+          "type": "number"
+        },
+        "cy": {
+          "default": 0,
+          "description": "Center Y",
+          "type": "number"
+        },
+        "radius": {
+          "default": 25,
+          "description": "Radius",
+          "type": "number"
+        },
+        "sides": {
+          "default": 6,
+          "description": "Number of sides (3-100)",
+          "type": "integer"
+        },
+        "unit": {
+          "description": "Unit; omitted = session default (set_units)",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "draw_rectangle": {
+    "description": "Draw a rectangle in the active sketch.",
+    "inputSchema": {
+      "properties": {
+        "unit": {
+          "description": "Unit; omitted = session default (set_units)",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x1": {
+          "default": -50,
+          "description": "First corner X",
+          "type": "number"
+        },
+        "x2": {
+          "default": 50,
+          "description": "Second corner X",
+          "type": "number"
+        },
+        "y1": {
+          "default": -25,
+          "description": "First corner Y",
+          "type": "number"
+        },
+        "y2": {
+          "default": 25,
+          "description": "Second corner Y",
+          "type": "number"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "draw_rectangle_3point_center": {
+    "description": "Draw a 3-point center rectangle. The first two points define the center and one corner; the third sets the width direction.",
+    "inputSchema": {
+      "properties": {
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x1": {
+          "type": "number"
+        },
+        "x2": {
+          "type": "number"
+        },
+        "x3": {
+          "type": "number"
+        },
+        "y1": {
+          "type": "number"
+        },
+        "y2": {
+          "type": "number"
+        },
+        "y3": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x1",
+        "y1",
+        "x2",
+        "y2",
+        "x3",
+        "y3"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_rectangle_3point_corner": {
+    "description": "Draw a 3-point corner rectangle. The first two points define one edge; the third sets the opposite corner.",
+    "inputSchema": {
+      "properties": {
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x1": {
+          "type": "number"
+        },
+        "x2": {
+          "type": "number"
+        },
+        "x3": {
+          "type": "number"
+        },
+        "y1": {
+          "type": "number"
+        },
+        "y2": {
+          "type": "number"
+        },
+        "y3": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x1",
+        "y1",
+        "x2",
+        "y2",
+        "x3",
+        "y3"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_sketch_text": {
+    "description": "Insert sketch text at a point in the active sketch. The text is stored as an ISketchText object, read back, and the sketch's text segment count must grow, so the result is proven rather than assumed. The point is given in the requested unit. alignment_code is passed straight through to SolidWorks (the live test uses 2) and the width factor and character spacing are the verified 100/100 percentages.",
+    "inputSchema": {
+      "properties": {
+        "alignment_code": {
+          "default": 2,
+          "maximum": 3,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "text": {
+          "type": "string"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x": {
+          "default": 0,
+          "type": "number"
+        },
+        "y": {
+          "default": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_slot": {
+    "description": "Draw a straight center-to-center slot in the active sketch.",
+    "inputSchema": {
+      "properties": {
+        "unit": {
+          "description": "Unit; omitted = session default (set_units)",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "width": {
+          "description": "Slot width",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "x1": {
+          "description": "First arc center X",
+          "type": "number"
+        },
+        "x2": {
+          "description": "Second arc center X",
+          "type": "number"
+        },
+        "y1": {
+          "description": "First arc center Y",
+          "type": "number"
+        },
+        "y2": {
+          "description": "Second arc center Y",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x1",
+        "y1",
+        "x2",
+        "y2",
+        "width"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_spline": {
+    "description": "Draw a spline through ordered 2D points in the active sketch.",
+    "inputSchema": {
+      "properties": {
+        "points": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "type": "array"
+          },
+          "minItems": 2,
+          "type": "array"
+        },
+        "unit": {
+          "description": "Unit; omitted = session default (set_units)",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "points"
+      ],
+      "type": "object"
+    }
+  },
+  "draw_tangent_arc": {
+    "description": "Draw a tangent arc from an existing segment endpoint to a second point. The first point must be an endpoint of an existing sketch segment.",
+    "inputSchema": {
+      "properties": {
+        "end_x": {
+          "type": "number"
+        },
+        "end_y": {
+          "type": "number"
+        },
+        "start_x": {
+          "type": "number"
+        },
+        "start_y": {
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "start_x",
+        "start_y",
+        "end_x",
+        "end_y"
+      ],
+      "type": "object"
+    }
+  },
+  "edit_component_pattern": {
+    "description": "Edit instance count or spacing of a LocalLPattern in an assembly copy, or suppress a LocalLPattern/LocalCirPattern. Verifies readback; does not save.",
+    "inputSchema": {
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "linear_count"
+              }
+            },
+            "required": [
+              "action"
+            ]
+          },
+          "then": {
+            "required": [
+              "instances",
+              "expected_instances"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "spacing_dimension"
+              }
+            },
+            "required": [
+              "action"
+            ]
+          },
+          "then": {
+            "required": [
+              "dimension_name",
+              "spacing_mm",
+              "expected_spacing_mm"
+            ]
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "not": {
+                  "required": [
+                    "action"
+                  ]
+                }
+              },
+              {
+                "properties": {
+                  "action": {
+                    "const": "suppression"
+                  }
+                }
+              }
+            ]
+          },
+          "then": {
+            "required": [
+              "suppressed",
+              "expected_suppressed"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "action": {
+          "default": "suppression",
+          "enum": [
+            "suppression",
+            "linear_count",
+            "spacing_dimension"
+          ],
+          "type": "string"
+        },
+        "configuration": {
+          "description": "Expected active configuration",
+          "type": "string"
+        },
+        "dimension_name": {
+          "type": "string"
+        },
+        "edit_original": {
+          "default": false,
+          "description": "Edit the original; path policy still applies",
+          "type": "boolean"
+        },
+        "expected_instances": {
+          "minimum": 2,
+          "type": "integer"
+        },
+        "expected_spacing_mm": {
+          "type": "number"
+        },
+        "expected_suppressed": {
+          "type": "boolean"
+        },
+        "expected_type": {
+          "type": "string"
+        },
+        "feature_name": {
+          "type": "string"
+        },
+        "instances": {
+          "minimum": 2,
+          "type": "integer"
+        },
+        "spacing_mm": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "suppressed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "feature_name",
+        "expected_type",
+        "configuration"
+      ],
+      "type": "object"
+    }
+  },
+  "edit_feature_definition": {
+    "description": "Edit depth and blind/mid-plane end condition of a Boss/Cut part copy, or suppress supported features. Verifies readback; does not save.",
+    "inputSchema": {
+      "allOf": [
+        {
+          "else": {
+            "required": [
+              "suppressed",
+              "expected_suppressed"
+            ]
+          },
+          "if": {
+            "properties": {
+              "action": {
+                "const": "extrusion"
+              }
+            },
+            "required": [
+              "action"
+            ]
+          },
+          "then": {
+            "required": [
+              "depth_mm",
+              "expected_depth_mm",
+              "end_condition",
+              "expected_end_condition"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "action": {
+          "default": "suppression",
+          "enum": [
+            "suppression",
+            "extrusion"
+          ],
+          "type": "string"
+        },
+        "configuration": {
+          "description": "Expected active configuration",
+          "type": "string"
+        },
+        "depth_mm": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "edit_original": {
+          "default": false,
+          "description": "Edit the original; path policy still applies",
+          "type": "boolean"
+        },
+        "end_condition": {
+          "enum": [
+            "blind",
+            "mid_plane"
+          ],
+          "type": "string"
+        },
+        "expected_depth_mm": {
+          "type": "number"
+        },
+        "expected_end_condition": {
+          "enum": [
+            "blind",
+            "mid_plane"
+          ],
+          "type": "string"
+        },
+        "expected_suppressed": {
+          "type": "boolean"
+        },
+        "expected_type": {
+          "type": "string"
+        },
+        "feature_name": {
+          "type": "string"
+        },
+        "suppressed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "feature_name",
+        "expected_type",
+        "configuration"
+      ],
+      "type": "object"
+    }
+  },
+  "edit_mate": {
+    "description": "Edit a named distance/angle mate driver, or suppress a supported mate, in a verified assembly copy. Rejects driven dimensions. Does not save.",
+    "inputSchema": {
+      "allOf": [
+        {
+          "else": {
+            "required": [
+              "suppressed",
+              "expected_suppressed"
+            ]
+          },
+          "if": {
+            "properties": {
+              "action": {
+                "const": "dimension"
+              }
+            },
+            "required": [
+              "action"
+            ]
+          },
+          "then": {
+            "required": [
+              "dimension_name",
+              "value",
+              "expected_value",
+              "unit"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "action": {
+          "default": "suppression",
+          "enum": [
+            "suppression",
+            "dimension"
+          ],
+          "type": "string"
+        },
+        "configuration": {
+          "description": "Expected active configuration",
+          "type": "string"
+        },
+        "dimension_name": {
+          "type": "string"
+        },
+        "edit_original": {
+          "default": false,
+          "description": "Edit the original; path policy still applies",
+          "type": "boolean"
+        },
+        "expected_suppressed": {
+          "type": "boolean"
+        },
+        "expected_type": {
+          "type": "string"
+        },
+        "expected_value": {
+          "type": "number"
+        },
+        "feature_name": {
+          "type": "string"
+        },
+        "suppressed": {
+          "type": "boolean"
+        },
+        "unit": {
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "in",
+            "ft",
+            "deg",
+            "rad"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "feature_name",
+        "expected_type",
+        "configuration"
+      ],
+      "type": "object"
+    }
+  },
+  "execute_python": {
+    "description": "Execute custom Python code with stdout capture. Access 'sw' (app), 'doc' (active document). Use print() for debug output.",
+    "inputSchema": {
+      "properties": {
+        "code": {
+          "description": "Python code to execute",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "type": "object"
+    }
+  },
+  "export_assembly_manufacturing_package": {
+    "description": "Create a fresh assembly plan, one isolated native graph and batch exact-configuration part STEP, geometric plate-candidate DXF and optional native sheet-body DXF. Optional three-view draft PDFs/native drawings; no full dimensioning. Whole-part STEP is not per-body tube laser. Records per-item failures/skips and quantities, restores source and closes copies. No nesting or manufacturing certification; new output folder required. Up to 200 selected parts.",
+    "inputSchema": {
+      "properties": {
+        "configuration": {
+          "type": "string"
+        },
+        "document_path": {
+          "type": "string"
+        },
+        "drawing_template_path": {
+          "description": "Existing .drwdot for drawing_pdf; omit for installed draft template.",
+          "type": "string"
+        },
+        "expected_plan_fingerprint": {
+          "description": "Required with item_ids: plan_fingerprint from fresh plan_assembly_documentation.",
+          "maxLength": 64,
+          "minLength": 64,
+          "type": "string"
+        },
+        "formats": {
+          "default": [
+            "step",
+            "plate_dxf"
+          ],
+          "items": {
+            "enum": [
+              "step",
+              "plate_dxf",
+              "sheet_dxf",
+              "drawing_pdf"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "item_ids": {
+          "description": "Exact IDs from a fresh plan on unchanged assembly, or omit for all active parts.",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "output_folder": {
+          "type": "string"
+        },
+        "projection": {
+          "default": "first_angle",
+          "enum": [
+            "first_angle",
+            "third_angle"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_path",
+        "configuration",
+        "output_folder"
+      ],
+      "type": "object"
+    }
+  },
+  "export_component_edge_svg": {
+    "description": "Export a labelled SVG detail of one exact assembly component edge page plus provenance JSON. Labels bind native edges in this MCP session; select via select_component_svg_edges. Wire projection includes hidden/overlapping edges; no manufacturing or whole-assembly drawing implied.",
+    "inputSchema": {
+      "properties": {
+        "component_path": {
+          "type": "string"
+        },
+        "limit": {
+          "default": 40,
+          "maximum": 100,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "output_path": {
+          "type": "string"
+        },
+        "view": {
+          "default": "isometric",
+          "enum": [
+            "xy",
+            "xz",
+            "yz",
+            "isometric"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_path",
+        "output_path"
+      ],
+      "type": "object"
+    }
+  },
+  "export_face_to_dxf": {
+    "description": "Export a single planar face of the active part to a DXF or DWG file, for laser/plasma cutting. face_index refers to the index from list_planar_faces on the current model state -- re-run list_planar_faces if the model changed since. In-plane axes are derived from the face's longest straight edge, so the output is not rotated. Does not modify the model.",
+    "inputSchema": {
+      "properties": {
+        "face_index": {
+          "description": "Index from list_planar_faces",
+          "type": "integer"
+        },
+        "output_path": {
+          "description": "Full destination path, extension .dxf or .dwg",
+          "type": "string"
+        }
+      },
+      "required": [
+        "face_index",
+        "output_path"
+      ],
+      "type": "object"
+    }
+  },
+  "export_flat_pattern": {
+    "description": "Direct DXF/DWG flat-pattern export of the active saved sheet-metal part. For one body of a multibody part with source-state isolation, use export_sheet_metal_body_dxf. Native exports can refresh model state; no source-isolation guarantee on this legacy path.",
+    "inputSchema": {
+      "properties": {
+        "output_path": {
+          "description": "Full destination path, extension .dxf or .dwg",
+          "type": "string"
+        }
+      },
+      "required": [
+        "output_path"
+      ],
+      "type": "object"
+    }
+  },
+  "export_sheet_metal_body_dxf": {
+    "description": "Export one visible sheet body to flat.dxf in a NEW approved folder via an isolated saved-project copy. Requires fresh body_index/update_stamp from list_sheet_metal_bodies and a clean saved working source. Native export may reorder/dirty only the disposable copy. Verifies exact copied flat-pattern ownership and unchanged source/selection; closes copies without saving. Retains native-copy provenance; geometry-only DXF, no automatic nesting or all-body batch.",
+    "inputSchema": {
+      "properties": {
+        "body_index": {
+          "description": "Visible body_index from fresh list_sheet_metal_bodies.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "destination_folder": {
+          "description": "New approved folder outside the source project folder; contains flat.dxf, export.json and native-copy.",
+          "type": "string"
+        },
+        "expected_update_stamp": {
+          "description": "update_stamp returned by the same fresh inventory.",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "body_index",
+        "expected_update_stamp",
+        "destination_folder"
+      ],
+      "type": "object"
+    }
+  },
+  "export_step": {
+    "description": "Export the active model to a new STEP/STP file without saving the native document.",
+    "inputSchema": {
+      "properties": {
+        "output_path": {
+          "description": "New .step or .stp path.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "output_path"
+      ],
+      "type": "object"
+    }
+  },
+  "export_stl": {
+    "description": "Export the active model to a new STL file using the current SolidWorks tessellation and binary/ASCII preferences.",
+    "inputSchema": {
+      "properties": {
+        "output_path": {
+          "description": "New .stl path.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "output_path"
+      ],
+      "type": "object"
+    }
+  },
+  "extend_entities": {
+    "description": "Extend one existing sketch entity to the next entity in its path. Select the entity by its exact sketch segment name and give a pick point near the end to extend. The sketch is reopened for edit and closed again; success is confirmed by an observed geometry change.",
+    "inputSchema": {
+      "properties": {
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "type": "array"
+        },
+        "pick": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "sketch": {
+          "type": "string"
+        },
+        "unit": {
+          "description": "Unit; omitted = session default",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities"
+      ],
+      "type": "object"
+    }
+  },
+  "extend_surface": {
+    "description": "Linearly extend one edge of a sheet surface by a given distance.",
+    "inputSchema": {
+      "properties": {
+        "distance": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "edge_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "sheet_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "sheet_index",
+        "edge_index",
+        "distance"
+      ],
+      "type": "object"
+    }
+  },
+  "extrude_sketch": {
+    "description": "Extrude the active sketch (Boss-Extrude).",
+    "inputSchema": {
+      "properties": {
+        "both_directions": {
+          "default": false,
+          "description": "Extrude in both directions",
+          "type": "boolean"
+        },
+        "depth": {
+          "default": 10,
+          "description": "Extrusion depth",
+          "type": "number"
+        },
+        "unit": {
+          "description": "Unit; omitted = session default (set_units)",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "extrude_surface": {
+    "description": "Extrude a named 2D sketch into a single-ended open surface.",
+    "inputSchema": {
+      "properties": {
+        "depth": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "reverse": {
+          "default": false,
+          "type": "boolean"
+        },
+        "sketch_name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch_name",
+        "depth"
+      ],
+      "type": "object"
+    }
+  },
+  "filled_surface": {
+    "description": "Fill a closed 2D sketch boundary with a filled surface patch. Supply its exact feature name.",
+    "inputSchema": {
+      "properties": {
+        "sketch_name": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch_name"
+      ],
+      "type": "object"
+    }
+  },
+  "fillet_edges": {
+    "description": "Edge fillet; native geometry verified; no save.",
+    "inputSchema": {
+      "properties": {
+        "edge_indices": {
+          "description": "Fresh list_body_edges indexes; exclusive with edge_points.",
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 256,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "edge_points": {
+          "description": "[x,y,z] in unit; omit edge inputs for selection.",
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 3,
+            "minItems": 3,
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "radius": {
+          "default": 2,
+          "description": "Fillet radius",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "tangent_propagation": {
+          "default": true,
+          "type": "boolean"
+        },
+        "unit": {
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "flatten_sheet_metal": {
+    "description": "Suppress or unsuppress the active part's Flat-Pattern feature, toggling the body between flattened and folded state. Modifies the active part (not saved).",
+    "inputSchema": {
+      "properties": {
+        "flatten": {
+          "description": "True to flatten (suppress Flat-Pattern feature state 1), false to fold back (state 0).",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "flatten"
+      ],
+      "type": "object"
+    }
+  },
+  "get_body_bounding_box": {
+    "description": "Read approximate per-body and combined bounding boxes for the active part.",
+    "inputSchema": {
+      "properties": {
+        "length_unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "visible_only": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "get_capabilities": {
+    "description": "Report the currently advertised tools, guarded-mode state, and known blocked capabilities.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "get_component": {
+    "description": "Read one exact top-level component: path, configuration, translation (mm), rotation_deg, suppressed, fixed, and the mates touching it. Read-only.",
+    "inputSchema": {
+      "properties": {
+        "component_name": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_name"
+      ],
+      "type": "object"
+    }
+  },
+  "get_cut_list": {
+    "description": "Read cut-list items from the active weldment part: description, quantity, length (mm), material, cut angles, and all other custom properties per item. Forces a cut-list refresh on each folder before reading, so data reflects the current model. Read-only.",
+    "inputSchema": {
+      "properties": {
+        "include_properties": {
+          "default": true,
+          "description": "Include the full raw custom-property map per item, in addition to the typed fields. Default true.",
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "get_cut_list_body_map": {
+    "description": "Read current cut-list folders and exact solid membership. body_index matches visible Save Bodies indices; hidden bodies have null. Cached properties retain native text/units; no refresh or model changes. Refresh indices after edits/visibility changes.",
+    "inputSchema": {
+      "properties": {
+        "include_properties": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "get_displacement_results": {
+    "description": "Read the minimum and maximum displacement of a Simulation study step and return the node indices and values. component 3 (the default) is the resultant URES; 0/1/2 are UX/UY/UZ and 8/9/10 are the rotations.",
+    "inputSchema": {
+      "properties": {
+        "component": {
+          "description": "Displacement component (swsDisplacementComponent_e): 0 UX, 1 UY, 2 UZ, 3 URES (default), 8-10 rotations.",
+          "maximum": 14,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "step": {
+          "description": "Solution step number; default 1 for static studies.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "study": {
+          "description": "Study name; defaults to the newest study.",
+          "type": "string"
+        },
+        "unit": {
+          "description": "Linear unit for the translation; default mm.",
+          "enum": [
+            "cm",
+            "inch",
+            "m",
+            "mm"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "get_document_info": {
+    "description": "Get information about the active document.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "get_flat_pattern_info": {
+    "description": "Flatten the active sheet metal part, read the flat pattern's bounding box and body/face counts, then fold it back. Net effect on the model is none (not saved), but the part is flattened and refolded during the call.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "get_mass_properties": {
+    "description": "Read volume, area, mass, density, and center of mass without modifying the active model.",
+    "inputSchema": {
+      "properties": {
+        "length_unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "get_modeling_guide": {
+    "description": "Read SolidWorks expert guidance and ordered modeling workflows. Use topic='index' to choose a topic before modeling; returns relevant currently advertised tools and recorded evidence. Read-only, no CAD connection needed.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "topic": {
+          "default": "index",
+          "description": "Exact topic ID from index, e.g. workflow/part, workflow/weldment, expert.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "get_reaction_results": {
+    "description": "Read the reaction force and moment the solved restraints report. Pass face_indices (typically the restrained faces) to get the reaction on those faces; without it only the whole-model total is returned. A solved support must react exactly what was applied, so this is the value-level check for a force or torque. Units: N, lbf or kgf. The moment half is the add-in's nodal moment reaction and stays zero for a solid mesh, whose nodes carry no rotational degree of freedom; the physical moment reaction lives in the force distribution, so verify moments through the force components.",
+    "inputSchema": {
+      "properties": {
+        "face_indices": {
+          "description": "Planar faces to report (e.g. the restrained faces); omit for the whole model only.",
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "step": {
+          "description": "Solution step number; default 1 for static studies.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "study": {
+          "description": "Study name; defaults to the newest study.",
+          "type": "string"
+        },
+        "unit": {
+          "description": "Force unit (swsForceUnit_e); default N.",
+          "enum": [
+            "N",
+            "kgf",
+            "lbf"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "get_sheet_metal_info": {
+    "description": "Read the first Sheet-Metal definition: thickness, K-factor, radius and relief. Use list_sheet_metal_bodies for per-body parameters. Read-only.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "get_sketch_relations": {
+    "description": "List the relations of a named sketch and report whether it is fully defined. Runs on a closed sketch and changes nothing.",
+    "inputSchema": {
+      "properties": {
+        "sketch": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch"
+      ],
+      "type": "object"
+    }
+  },
+  "get_sketch_status": {
+    "description": "Get diagnostic info: active sketch state, sketch count, sketch names in feature tree.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "get_solidworks_info": {
+    "description": "Get SolidWorks installation information and, when connected, session health: process id, dedicated GPU memory, open document count and a restart hint.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "get_standard_part_sizes": {
+    "description": "Return the materialised sizes of a standard part, e.g. the Toolbox configurations 'ISO 4762 M10 x 16 - 16N'. Pass the same filters as list_standard_parts. Sizes come from sizes.json; parts SolidWorks has never configured have none. Sizes this library can prepare on demand from the Toolbox recipes are listed under preparable_sizes and are inserted only after geometry and save/reopen verification.",
+    "inputSchema": {
+      "properties": {
+        "file": {
+          "description": "Exact master file name, to disambiguate.",
+          "type": "string"
+        },
+        "standard": {
+          "description": "Standard id or folder, e.g. ISO.",
+          "type": "string"
+        },
+        "type": {
+          "description": "Substring of the part type, e.g. 'socket head cap'.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "standard"
+      ],
+      "type": "object"
+    }
+  },
+  "get_stress_results": {
+    "description": "Read the minimum and maximum stress of a Simulation study step and return the node indices and values.",
+    "inputSchema": {
+      "properties": {
+        "component": {
+          "description": "Stress component (swsStressComponent_e); default 9 = von Mises.",
+          "maximum": 13,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "step": {
+          "description": "Solution step number; default 1 for static studies.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "study": {
+          "description": "Study name; defaults to the newest study.",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "hole_wizard": {
+    "description": "ANSI metric drill/blind by default on list_planar_faces; through_all omits depth_mm.",
+    "inputSchema": {
+      "properties": {
+        "catalog_size": {
+          "description": "Recesses need exact size (M6).",
+          "minLength": 1,
+          "type": "string"
+        },
+        "depth_mm": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "diameter_mm": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "end_condition": {
+          "enum": [
+            "blind",
+            "through_all"
+          ]
+        },
+        "face_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "head_angle_deg": {
+          "exclusiveMaximum": 180,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "head_depth_mm": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "head_diameter_mm": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "hole_type": {
+          "enum": [
+            "drill",
+            "counterbore",
+            "countersink"
+          ]
+        },
+        "point_mm": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "standard": {
+          "enum": [
+            "ansi_metric",
+            "din",
+            "iso"
+          ]
+        }
+      },
+      "required": [
+        "face_index",
+        "point_mm",
+        "diameter_mm"
+      ],
+      "type": "object"
+    }
+  },
+  "import_neutral_file": {
+    "description": "Open a neutral CAD file (STEP/STP/IGES/X_T/X_B/SAT) or an existing native part/assembly as a new SolidWorks document. Handles the 3D Interconnect toggle that otherwise makes a headless import fail.",
+    "inputSchema": {
+      "properties": {
+        "filepath": {
+          "description": "Full path of the file to open.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "filepath"
+      ],
+      "type": "object"
+    }
+  },
+  "import_parameter_workspace": {
+    "description": "Create a new workspace project from exact active-copy native documents and existing driving dimensions; no CAD dimensions changed.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "include_references": {
+          "default": true,
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    }
+  },
+  "insert_component": {
+    "description": "Insert a Part or sub-assembly into the active assembly at x,y,z (meters, assembly space).",
+    "inputSchema": {
+      "properties": {
+        "configuration": {
+          "description": "Configuration to insert, e.g. 'ISO 4762 M10 x 16 - 16N'; default the part's default",
+          "type": "string"
+        },
+        "filepath": {
+          "description": "Full path to the .SLDPRT/.SLDASM",
+          "type": "string"
+        },
+        "place": {
+          "description": "'center' (default): bounding-box centre at x,y,z; 'origin': part origin (part must be open)",
+          "enum": [
+            "center",
+            "origin"
+          ],
+          "type": "string"
+        },
+        "x": {
+          "description": "Meters, default 0",
+          "type": "number"
+        },
+        "y": {
+          "description": "Meters, default 0",
+          "type": "number"
+        },
+        "z": {
+          "description": "Meters, default 0",
+          "type": "number"
+        }
+      },
+      "required": [
+        "filepath"
+      ],
+      "type": "object"
+    }
+  },
+  "insert_cut_list_table": {
+    "description": "Insert a weldment cut-list table into a drawing view. The view must already show a weldment part with a cut list (see get_cut_list). Modifies the active drawing.",
+    "inputSchema": {
+      "properties": {
+        "template_path": {
+          "description": "Full path to a .sldwldtbt table template. Optional; empty uses the default template.",
+          "type": "string"
+        },
+        "view_name": {
+          "description": "Name of the drawing view to attach the table to, from list_drawing_views.",
+          "type": "string"
+        },
+        "x": {
+          "default": 0.05,
+          "description": "Table anchor X position in meters.",
+          "type": "number"
+        },
+        "y": {
+          "default": 0.05,
+          "description": "Table anchor Y position in meters.",
+          "type": "number"
+        }
+      },
+      "required": [
+        "view_name"
+      ],
+      "type": "object"
+    }
+  },
+  "insert_marked_dimensions": {
+    "description": "Insert only the model dimensions marked 'Mark for Drawing' into one drawing view. Dimensions that are not marked for drawing are not imported. Modifies the active drawing.",
+    "inputSchema": {
+      "properties": {
+        "view_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "view_name"
+      ],
+      "type": "object"
+    }
+  },
+  "insert_part": {
+    "description": "Insert the solid geometry of another saved part (.SLDPRT) into the active part as a new Stock body.",
+    "inputSchema": {
+      "properties": {
+        "part_path": {
+          "description": "Full path of the source .SLDPRT file.",
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "part_path"
+      ],
+      "type": "object"
+    }
+  },
+  "insert_standard_part": {
+    "description": "Insert a standard part (e.g. ISO 4017 M10 x 40) into the active assembly at x,y,z via insert_component. Fasteners require size= (e.g. 'ISO 4762 M10 x 16 - 16N'), which prepares that Toolbox size.",
+    "inputSchema": {
+      "properties": {
+        "file": {
+          "description": "Exact master file name",
+          "type": "string"
+        },
+        "place": {
+          "description": "As in insert_component",
+          "enum": [
+            "center",
+            "origin"
+          ],
+          "type": "string"
+        },
+        "size": {
+          "description": "Configuration, e.g. 'ISO 4762 M10 x 16 - 16N'",
+          "type": "string"
+        },
+        "standard": {
+          "description": "Standard id or folder, e.g. ISO, DIN",
+          "type": "string"
+        },
+        "type": {
+          "description": "Part type substring, e.g. 'hex screw'",
+          "type": "string"
+        },
+        "x": {
+          "description": "Meters, default 0",
+          "type": "number"
+        },
+        "y": {
+          "description": "Meters, default 0",
+          "type": "number"
+        },
+        "z": {
+          "description": "Meters, default 0",
+          "type": "number"
+        }
+      },
+      "required": [
+        "standard"
+      ],
+      "type": "object"
+    }
+  },
+  "inspect_construction_geometry": {
+    "description": "Read a named sketch line/arc endpoint geometry in sketch coordinates, or structural-member profile path. Reports endpoint extent midpoint, not a general curve bounding box or mass centroid; never selects, edits or saves.",
+    "inputSchema": {
+      "properties": {
+        "feature_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "feature_name"
+      ],
+      "type": "object"
+    }
+  },
+  "inspect_document": {
+    "description": "Build a versioned, pageable snapshot of the active document and assembly graph. Repeated instances and incomplete references are preserved.",
+    "inputSchema": {
+      "properties": {
+        "component_mode": {
+          "default": "detailed",
+          "description": "Traversal mode for the assembly components: 'fast' reads only name and path and skips leaf parts (much cheaper on large assemblies, but instances then carry no transform or suppression state).",
+          "enum": [
+            "fast",
+            "detailed"
+          ],
+          "type": "string"
+        },
+        "cursor": {
+          "type": "string"
+        },
+        "depth": {
+          "default": 4,
+          "maximum": 32,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "page_size": {
+          "default": 100,
+          "maximum": 500,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "sections": {
+          "items": {
+            "enum": [
+              "assembly",
+              "configurations",
+              "dependencies",
+              "features",
+              "manufacturing",
+              "mates",
+              "parameters",
+              "summary"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "inspect_holes_and_fasteners": {
+    "description": "Inventory native HoleWzd/HoleSeries features in the active document. Does not identify hardware from diameter/name or infer bolt fit; assembly child documents are not traversed.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "inspect_model_health": {
+    "description": "Read feature error codes and dependency paths without rebuilding. Reports unknown health when APIs are unavailable; not a full geometry/manufacturing validation.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "inspect_parameter_dependencies": {
+    "description": "Read native document dependency graph, shared assembly occurrences and active equation drivers; does not infer missing engineering relationships.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": "object"
+    }
+  },
+  "inspect_part_manufacturing": {
+    "description": "Read solid bodies, exact visible indices and cut-list membership, native sheet flags, material name and conservative plate candidates. No refresh or selection/configuration changes. Plate candidates are geometry only, not confirmed fabrication/material. Indices expire on model changes.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "inspect_project_references": {
+    "description": "Read the saved dependency graph without opening or changing source documents. Discover related drawings in the source folder; pass external drawings explicitly.",
+    "inputSchema": {
+      "properties": {
+        "drawings": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "include_drawings": {
+          "default": true,
+          "type": "boolean"
+        },
+        "source_path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_path"
+      ],
+      "type": "object"
+    }
+  },
+  "knit_surface": {
+    "description": "Knit two or more touching named sheet-surface features into one sheet.",
+    "inputSchema": {
+      "properties": {
+        "merge_entities": {
+          "default": true,
+          "type": "boolean"
+        },
+        "surface_names": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 2,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "surface_names"
+      ],
+      "type": "object"
+    }
+  },
+  "linear_pattern": {
+    "description": "Pattern one named feature along one named direction feature using exact feature names.",
+    "inputSchema": {
+      "properties": {
+        "direction_feature": {
+          "type": "string"
+        },
+        "flip_direction": {
+          "default": false,
+          "type": "boolean"
+        },
+        "geometry_pattern": {
+          "default": true,
+          "type": "boolean"
+        },
+        "instances": {
+          "minimum": 2,
+          "type": "integer"
+        },
+        "seed_feature": {
+          "type": "string"
+        },
+        "spacing": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "seed_feature",
+        "direction_feature",
+        "instances",
+        "spacing"
+      ],
+      "type": "object"
+    }
+  },
+  "list_body_edges": {
+    "description": "List the unique edges of every solid body in the active part, with index, body, endpoints in millimetres, straight-edge length and curve type. Use the index with create_cosmetic_weld_bead. Read-only.",
+    "inputSchema": {
+      "properties": {
+        "min_length_mm": {
+          "default": 0.0,
+          "description": "Only report edges at least this long (straight edges)",
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "list_component_edges": {
+    "description": "Inspect edges of one exact native component Name2 path, including nested instances. Paged/filterable in assembly mm; circles retained. Returns session-bound snapshot/edge IDs for select_component_edges. No whole-assembly edge scan or model changes.",
+    "inputSchema": {
+      "properties": {
+        "body_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "component_path": {
+          "type": "string"
+        },
+        "curve_type": {
+          "default": "all",
+          "enum": [
+            "all",
+            "line",
+            "circle",
+            "other"
+          ],
+          "type": "string"
+        },
+        "limit": {
+          "default": 20,
+          "maximum": 100,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "min_length_mm": {
+          "default": 0,
+          "minimum": 0,
+          "type": "number"
+        },
+        "near_point_mm": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "offset": {
+          "default": 0,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "within_mm": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "component_path"
+      ],
+      "type": "object"
+    }
+  },
+  "list_component_faces": {
+    "description": "List the planar and cylindrical faces of one component in the active assembly, with index, type and size. Use the index with mate_coincident/mate_concentric/mate_distance's face_index1/face_index2. Indexes are only valid for the current model state -- re-run after any mate is added, since components move.",
+    "inputSchema": {
+      "properties": {
+        "component_name": {
+          "description": "Name2 of the component, e.g. \"Block1-1\"",
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_name"
+      ],
+      "type": "object"
+    }
+  },
+  "list_components": {
+    "description": "List the components of the active assembly. mode 'fast' reads only name and path and never queries leaf parts, which keeps large assemblies quick; mode 'detailed' also reads transforms, suppression state, configuration and fixed/virtual flags.",
+    "inputSchema": {
+      "properties": {
+        "depth": {
+          "default": 32,
+          "maximum": 32,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "mode": {
+          "default": "detailed",
+          "description": "fast: name + path only, leaves are not queried. detailed: every member, needed for transforms, suppression, configurations.",
+          "enum": [
+            "fast",
+            "detailed"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "list_drawing_views": {
+    "description": "List the views on the active drawing sheet, by name. Read-only.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "list_features": {
+    "description": "List all features in the model.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "list_hole_wizard_sizes": {
+    "description": "Read our generated Hole Wizard catalog: exact sizes, native standard/type IDs and separate clearance, recess and fastener dimensions. Does not access Toolbox or CAD.",
+    "inputSchema": {
+      "properties": {
+        "catalog_size": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "hole_type": {
+          "default": "drill",
+          "enum": [
+            "drill",
+            "counterbore",
+            "countersink"
+          ]
+        },
+        "limit": {
+          "default": 20,
+          "maximum": 100,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "standard": {
+          "default": "din",
+          "enum": [
+            "ansi_metric",
+            "din",
+            "iso"
+          ]
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "list_mates": {
+    "description": "List the mates already present in the active assembly's Mates feature group.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "list_model_parameters": {
+    "description": "Read existing feature/display dimensions and equation definitions in the active document. Reports partial coverage; hidden/API-inaccessible drivers are not invented.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "list_open_documents": {
+    "description": "List all open documents.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "list_planar_faces": {
+    "description": "List the planar faces of the open part, with index, area and normal. Use the index to pick a face for DXF export. Read-only.",
+    "inputSchema": {
+      "properties": {
+        "min_area_mm2": {
+          "description": "Skip faces smaller than this. Default 0.",
+          "type": "number"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "list_planes": {
+    "description": "List standard and reference planes in the active document without changing selection.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "list_sheet_metal_bodies": {
+    "description": "Read each sheet body\u2019s own native Sheet-Metal parameters and Flat-Pattern state, including hidden bodies. Visible body_index matches Save Bodies; solid_body_index includes hidden bodies. No flatten/rebuild/selection/save. Refresh after edits or reopening.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "list_standard_parts": {
+    "description": "List standard parts from the synced library: per-standard counts, or the full parts list for one standard. Data comes from the generated index.json; no SolidWorks calls are made.",
+    "inputSchema": {
+      "properties": {
+        "standard": {
+          "description": "Standard id or folder, e.g. ISO, DIN, ANSI_Metric, SKF.",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "list_weldment_profiles": {
+    "description": "List available weldment profile (.sldlfp) files under the SolidWorks weldment profiles library, grouped by folder. Use the returned path with create_structural_member. Read-only.",
+    "inputSchema": {
+      "properties": {
+        "filter": {
+          "description": "Case-insensitive substring to filter by filename. Optional.",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "loft_cut": {
+    "description": "Loft two or more ordered profile sketches as a cut through the active part. Profile order follows the list order.",
+    "inputSchema": {
+      "properties": {
+        "profile_sketches": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2,
+          "type": "array"
+        }
+      },
+      "required": [
+        "profile_sketches"
+      ],
+      "type": "object"
+    }
+  },
+  "loft_sketches": {
+    "description": "Loft two or more ordered profile sketches on the active part. Profile order follows the list order. Use exact sketch feature names.",
+    "inputSchema": {
+      "properties": {
+        "profile_sketches": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2,
+          "type": "array"
+        }
+      },
+      "required": [
+        "profile_sketches"
+      ],
+      "type": "object"
+    }
+  },
+  "loft_surface": {
+    "description": "Create an open lofted sheet through two ordered 2D profile sketches.",
+    "inputSchema": {
+      "properties": {
+        "profile_sketches": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        }
+      },
+      "required": [
+        "profile_sketches"
+      ],
+      "type": "object"
+    }
+  },
+  "make_component_independent": {
+    "description": "Duplicate one saved component/dependency graph into a NEW approved folder, then replace one immediate occurrence in the expected active verified copied assembly. Does not save the assembly; inspect mates.",
+    "inputSchema": {
+      "properties": {
+        "assembly_path": {
+          "type": "string"
+        },
+        "component_name": {
+          "type": "string"
+        },
+        "configuration": {
+          "type": "string"
+        },
+        "destination_folder": {
+          "type": "string"
+        },
+        "expected_path": {
+          "type": "string"
+        },
+        "reattach_mates": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "component_name",
+        "expected_path",
+        "assembly_path",
+        "configuration",
+        "destination_folder"
+      ],
+      "type": "object"
+    }
+  },
+  "manage_configurations": {
+    "description": "List existing configurations or explicitly activate one on a verified copy after matching the prior active configuration. Creation/deletion unsupported. Does not save.",
+    "inputSchema": {
+      "properties": {
+        "action": {
+          "default": "inspect",
+          "enum": [
+            "inspect",
+            "activate"
+          ],
+          "type": "string"
+        },
+        "configuration": {
+          "type": "string"
+        },
+        "edit_original": {
+          "default": false,
+          "description": "Edit the original; path policy still applies",
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "manage_external_references": {
+    "description": "Inspect dependency paths and available in-context reference count. Lock/unlock/break/relink are rejected because status/configuration-scoped readback is not yet validated.",
+    "inputSchema": {
+      "properties": {
+        "action": {
+          "default": "inspect",
+          "enum": [
+            "inspect"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "mate_coincident": {
+    "description": "Add a Coincident mate between a face of two components in the active assembly, selected by list_component_faces indexes.",
+    "inputSchema": {
+      "properties": {
+        "component1": {
+          "description": "Name2 of the first component",
+          "type": "string"
+        },
+        "component2": {
+          "description": "Name2 of the second component",
+          "type": "string"
+        },
+        "face_index1": {
+          "description": "Face index from list_component_faces(component1)",
+          "type": "integer"
+        },
+        "face_index2": {
+          "description": "Face index from list_component_faces(component2)",
+          "type": "integer"
+        },
+        "flip": {
+          "description": "Flip mate alignment. Default false.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "component1",
+        "face_index1",
+        "component2",
+        "face_index2"
+      ],
+      "type": "object"
+    }
+  },
+  "mate_concentric": {
+    "description": "Add a Concentric mate between a cylindrical face of two components in the active assembly, selected by list_component_faces indexes.",
+    "inputSchema": {
+      "properties": {
+        "component1": {
+          "description": "Name2 of the first component",
+          "type": "string"
+        },
+        "component2": {
+          "description": "Name2 of the second component",
+          "type": "string"
+        },
+        "face_index1": {
+          "description": "Cylindrical face index from list_component_faces(component1)",
+          "type": "integer"
+        },
+        "face_index2": {
+          "description": "Cylindrical face index from list_component_faces(component2)",
+          "type": "integer"
+        },
+        "flip": {
+          "description": "Flip mate alignment. Default false.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "component1",
+        "face_index1",
+        "component2",
+        "face_index2"
+      ],
+      "type": "object"
+    }
+  },
+  "mate_distance": {
+    "description": "Add a Distance mate between a face of two components in the active assembly, selected by list_component_faces indexes.",
+    "inputSchema": {
+      "properties": {
+        "component1": {
+          "description": "Name2 of the first component",
+          "type": "string"
+        },
+        "component2": {
+          "description": "Name2 of the second component",
+          "type": "string"
+        },
+        "distance_mm": {
+          "description": "Distance in mm",
+          "type": "number"
+        },
+        "face_index1": {
+          "description": "Face index from list_component_faces(component1)",
+          "type": "integer"
+        },
+        "face_index2": {
+          "description": "Face index from list_component_faces(component2)",
+          "type": "integer"
+        },
+        "flip": {
+          "description": "Flip mate direction. Default false.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "component1",
+        "face_index1",
+        "component2",
+        "face_index2",
+        "distance_mm"
+      ],
+      "type": "object"
+    }
+  },
+  "measure_distance": {
+    "description": "Measure the kernel minimum distance between two planar faces by their current list_planar_faces indexes. Re-list faces after model changes.",
+    "inputSchema": {
+      "properties": {
+        "face_index1": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "face_index2": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "length_unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "face_index1",
+        "face_index2"
+      ],
+      "type": "object"
+    }
+  },
+  "mirror_feature": {
+    "description": "Mirror one named feature about one exactly named plane on the active part. Use exact feature and plane names from list_planes.",
+    "inputSchema": {
+      "properties": {
+        "geometry_pattern": {
+          "default": true,
+          "type": "boolean"
+        },
+        "merge": {
+          "default": true,
+          "type": "boolean"
+        },
+        "mirror_plane": {
+          "type": "string"
+        },
+        "seed_feature": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "seed_feature",
+        "mirror_plane"
+      ],
+      "type": "object"
+    }
+  },
+  "move_copy_body": {
+    "description": "Translate one solid body by an XYZ vector; optionally retain the original as a copy.",
+    "inputSchema": {
+      "properties": {
+        "body_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "copy": {
+          "default": false,
+          "type": "boolean"
+        },
+        "dx": {
+          "type": "number"
+        },
+        "dy": {
+          "type": "number"
+        },
+        "dz": {
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "body_index",
+        "dx",
+        "dy",
+        "dz"
+      ],
+      "type": "object"
+    }
+  },
+  "offset_entities": {
+    "description": "Offset the named sketch entities by a signed distance, creating new parallel entities. A positive offset offsets outward, a negative one inward. Select entities by their exact sketch segment names; the sketch is reopened for edit and closed again.",
+    "inputSchema": {
+      "properties": {
+        "add_dimensions": {
+          "default": false,
+          "type": "boolean"
+        },
+        "both_directions": {
+          "default": false,
+          "type": "boolean"
+        },
+        "cap_ends": {
+          "default": false,
+          "type": "boolean"
+        },
+        "chain": {
+          "default": true,
+          "type": "boolean"
+        },
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "make_construction": {
+          "default": false,
+          "type": "boolean"
+        },
+        "offset": {
+          "type": "number"
+        },
+        "sketch": {
+          "type": "string"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities",
+        "offset"
+      ],
+      "type": "object"
+    }
+  },
+  "offset_surface": {
+    "description": "Create a parallel sheet from a named planar surface at a given offset.",
+    "inputSchema": {
+      "properties": {
+        "distance": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "reverse": {
+          "default": false,
+          "type": "boolean"
+        },
+        "surface_name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "surface_name",
+        "distance"
+      ],
+      "type": "object"
+    }
+  },
+  "open_document": {
+    "description": "Open an existing SolidWorks document.",
+    "inputSchema": {
+      "properties": {
+        "filepath": {
+          "description": "Path to file",
+          "type": "string"
+        }
+      },
+      "required": [
+        "filepath"
+      ],
+      "type": "object"
+    }
+  },
+  "pack_and_go": {
+    "description": "Save the active assembly and all referenced documents (parts, sub-assemblies, drawings) into a destination folder, using SolidWorks Pack and Go. Reports any referenced documents that live outside the assembly's own project folder, since those would silently break with a plain folder copy (O15).",
+    "inputSchema": {
+      "properties": {
+        "destination_folder": {
+          "description": "Folder to save the packed assembly into",
+          "type": "string"
+        },
+        "include_drawings": {
+          "description": "Include referenced drawings. Default true.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "destination_folder"
+      ],
+      "type": "object"
+    }
+  },
+  "plan_assembly_documentation": {
+    "description": "Read an exact saved active assembly without resolving or changing configurations; write JSON/CSV/Slovenian documentation plan with physical occurrence quantities, proposed STEP/PDF paths and explicit exclusions. Does not create drawings, DXF or STEP files or certify manufacturing readiness.",
+    "inputSchema": {
+      "properties": {
+        "configuration": {
+          "type": "string"
+        },
+        "document_path": {
+          "type": "string"
+        },
+        "output_folder": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_path",
+        "configuration",
+        "output_folder"
+      ],
+      "type": "object"
+    }
+  },
+  "plan_railing": {
+    "description": "Calculate railing post spacing with an explicit height datum; no structural or CAD verification.",
+    "inputSchema": {
+      "properties": {
+        "clear_height_mm": {
+          "type": "number"
+        },
+        "geometry_parameters": {
+          "type": "object"
+        },
+        "height_reference": {
+          "enum": [
+            "finished_floor",
+            "stair_nosing_line"
+          ],
+          "type": "string"
+        },
+        "max_post_spacing_mm": {
+          "type": "number"
+        },
+        "path_length_mm": {
+          "type": "number"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "plan_segments": {
+    "description": "Calculate length-based concept segmentation from caller-supplied transport and galvanizing limits; invents no joints.",
+    "inputSchema": {
+      "properties": {
+        "galvanizing_max_length_mm": {
+          "type": "number"
+        },
+        "joint_constraints": {
+          "type": "object"
+        },
+        "total_length_mm": {
+          "type": "number"
+        },
+        "transport_max_length_mm": {
+          "type": "number"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "plan_stair": {
+    "description": "Calculate a stair concept from explicit riser count, tread and landing inputs; does not create CAD or certify compliance.",
+    "inputSchema": {
+      "properties": {
+        "landing_lengths_mm": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "riser_count": {
+          "type": "integer"
+        },
+        "total_height_mm": {
+          "type": "number"
+        },
+        "tread_depth_mm": {
+          "type": "number"
+        },
+        "width_mm": {
+          "type": "number"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "plan_stair_turn": {
+    "description": "Plan explicit landing or equal-angle winder transition; separates transition element count from rises. Concept only, no CAD/structural validation.",
+    "inputSchema": {
+      "properties": {
+        "element_count": {
+          "type": "integer"
+        },
+        "transition_type": {
+          "enum": [
+            "landing",
+            "winders"
+          ],
+          "type": "string"
+        },
+        "turn_angle_deg": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "turn_angle_deg",
+        "transition_type",
+        "element_count"
+      ],
+      "type": "object"
+    }
+  },
+  "planar_surface": {
+    "description": "Create a planar surface from every segment of a closed, non-construction 2D sketch. Supply its exact feature name.",
+    "inputSchema": {
+      "properties": {
+        "sketch_name": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch_name"
+      ],
+      "type": "object"
+    }
+  },
+  "present_result": {
+    "description": "Open a specific verified copied native document silently, activate and verify its exact path, optionally set a standard view and zoom to fit (prepare_view=false activates for inspection only). Optional revision-bound PNG capture; does not save.",
+    "inputSchema": {
+      "properties": {
+        "capture": {
+          "default": false,
+          "type": "boolean"
+        },
+        "document_path": {
+          "type": "string"
+        },
+        "orientation": {
+          "default": "isometric",
+          "type": "string"
+        },
+        "output_path": {
+          "type": "string"
+        },
+        "prepare_view": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "document_path"
+      ],
+      "type": "object"
+    }
+  },
+  "process_parameter_workspace_job": {
+    "description": "Claim one queued GUI job, apply its immutable dimension changes on verified copies via MCP, save and report results to the shared register.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "job_id": {
+          "type": "string"
+        },
+        "project_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "project_id",
+        "job_id"
+      ],
+      "type": "object"
+    }
+  },
+  "read_parameter_workspace": {
+    "description": "Read local parameter projects or one project's owners, values, drafts, missing data, requests and history. No CAD connection.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "project_id": {
+          "description": "Omit to list projects; supply exact project ID for its snapshot.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "redo": {
+    "description": "Request one or more redo steps on the bound active document without saving it.",
+    "inputSchema": {
+      "properties": {
+        "steps": {
+          "default": 1,
+          "description": "Number of SolidWorks history steps to request.",
+          "maximum": 20,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "remove_component": {
+    "description": "Delete one exact top-level component from the active assembly together with its mates. Requires its current file path to guard against stale names. Verifies the component is gone and the others remain. Does not save.",
+    "inputSchema": {
+      "properties": {
+        "component_name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "expected_path": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_name",
+        "expected_path"
+      ],
+      "type": "object"
+    }
+  },
+  "rename_component": {
+    "description": "Rename one exact top-level component instance (new_name is the full instance name, e.g. 'stopnica-3'). Requires its current file path. Mates are kept. Verifies the new name. Does not save.",
+    "inputSchema": {
+      "properties": {
+        "component_name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "expected_path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "new_name": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_name",
+        "new_name",
+        "expected_path"
+      ],
+      "type": "object"
+    }
+  },
+  "rename_project_documents": {
+    "description": "Copy a saved CAD project into a NEW approved folder, rename selected closed COPIES by explicit source-path-to-basename mapping, relink and verify. Original/in-place renaming is never performed. Target basenames must be unique and distinct from original document names.",
+    "inputSchema": {
+      "properties": {
+        "destination_folder": {
+          "type": "string"
+        },
+        "drawings": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "include_drawings": {
+          "default": true,
+          "type": "boolean"
+        },
+        "rename_map": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "source_path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_path",
+        "destination_folder",
+        "rename_map"
+      ],
+      "type": "object"
+    }
+  },
+  "replace_component": {
+    "description": "Replace an exact occurrence in a verified copied assembly with another verified copied model. Defaults to one occurrence; optionally all occurrences of that document/configuration. Checks paths after rebuild; does not save or guarantee mate repair.",
+    "inputSchema": {
+      "properties": {
+        "all_instances": {
+          "default": false,
+          "type": "boolean"
+        },
+        "component_name": {
+          "type": "string"
+        },
+        "configuration": {
+          "type": "string"
+        },
+        "edit_original": {
+          "default": false,
+          "description": "Edit the original; path policy still applies",
+          "type": "boolean"
+        },
+        "expected_path": {
+          "type": "string"
+        },
+        "reattach_mates": {
+          "default": true,
+          "type": "boolean"
+        },
+        "replacement_path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_name",
+        "replacement_path",
+        "expected_path",
+        "configuration"
+      ],
+      "type": "object"
+    }
+  },
+  "replace_structural_profile": {
+    "description": "Replace the library profile of one WeldMemberFeat in a single-configuration verified part copy; requires exact prior profile path, verifies definition readback/rebuild. Does not save.",
+    "inputSchema": {
+      "properties": {
+        "configuration": {
+          "description": "Expected active configuration",
+          "type": "string"
+        },
+        "edit_original": {
+          "default": false,
+          "description": "Edit the original; path policy still applies",
+          "type": "boolean"
+        },
+        "expected_profile_path": {
+          "type": "string"
+        },
+        "feature_name": {
+          "type": "string"
+        },
+        "profile_path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "feature_name",
+        "expected_profile_path",
+        "profile_path",
+        "configuration"
+      ],
+      "type": "object"
+    }
+  },
+  "request_manufacturing_package_stop": {
+    "description": "Request cooperative stop of a running assembly export package after its current part. Works beside the busy COM thread; never kills SolidWorks. Completed outputs remain. Requires approved running package folder.",
+    "inputSchema": {
+      "properties": {
+        "output_folder": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "output_folder"
+      ],
+      "type": "object"
+    }
+  },
+  "resolve_persistent_reference": {
+    "description": "Resolve a base64 persistent reference only in its exact document path and active configuration; reports missing/deleted targets without substituting another feature.",
+    "inputSchema": {
+      "properties": {
+        "reference": {
+          "properties": {
+            "base64": {
+              "type": "string"
+            },
+            "configuration": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "configuration",
+            "base64"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "reference"
+      ],
+      "type": "object"
+    }
+  },
+  "restart_solidworks": {
+    "description": "Exit and relaunch SolidWorks to release graphics memory that closed documents keep until exit (see get_solidworks_info session.gpu_dedicated_mb). Refuses while any open document is unsaved, modified or outside the approved output roots; saved output documents are closed. Requires confirm=true after the user agreed.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "confirm": {
+          "default": false,
+          "description": "True only after the user agreed to the restart.",
+          "type": "boolean"
+        },
+        "exit_timeout_s": {
+          "default": 60,
+          "maximum": 300,
+          "minimum": 5,
+          "type": "number"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "review_galvanizing": {
+    "description": "Review explicitly supplied cavity facts and immersion orientation; no automatic holes, geometry verification or compliance approval.",
+    "inputSchema": {
+      "properties": {
+        "immersion_orientation": {
+          "type": "string"
+        },
+        "members": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "provider_document": {
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "revolve_cut": {
+    "description": "Revolve one closed sketch as a cut through the active part. The sketch must hold exactly one centerline as the axis, so draw the profile with draw_rectangle rather than draw_center_rectangle, whose construction diagonals make the axis ambiguous. angle is in degrees.",
+    "inputSchema": {
+      "properties": {
+        "angle": {
+          "default": 360,
+          "type": "number"
+        },
+        "sketch": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch"
+      ],
+      "type": "object"
+    }
+  },
+  "revolve_sketch": {
+    "description": "Revolve the latest closed sketch around its construction centerline.",
+    "inputSchema": {
+      "properties": {
+        "angle": {
+          "default": 360,
+          "description": "Revolution angle in degrees",
+          "exclusiveMinimum": 0,
+          "maximum": 360,
+          "type": "number"
+        },
+        "axis": {
+          "default": "centerline",
+          "description": "Supported axis mode",
+          "enum": [
+            "centerline"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "revolve_surface": {
+    "description": "Revolve an open 2D sketch containing exactly one construction centerline about that centerline into a sheet surface.",
+    "inputSchema": {
+      "properties": {
+        "angle": {
+          "default": 360,
+          "exclusiveMinimum": 0,
+          "maximum": 360,
+          "type": "number"
+        },
+        "reverse": {
+          "default": false,
+          "type": "boolean"
+        },
+        "sketch_name": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch_name"
+      ],
+      "type": "object"
+    }
+  },
+  "rib": {
+    "description": "Create a constant-thickness, undrafted rib from a named open sketch on an existing solid part. Material extends parallel to the sketch.",
+    "inputSchema": {
+      "properties": {
+        "both_sides": {
+          "default": true,
+          "type": "boolean"
+        },
+        "reverse_material": {
+          "default": false,
+          "type": "boolean"
+        },
+        "sketch_name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "thickness": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch_name",
+        "thickness"
+      ],
+      "type": "object"
+    }
+  },
+  "rotate_entities": {
+    "description": "Rotate the named sketch entities about a point in the sketch plane. SolidWorks applies this to the sketch frame, so the sketch coordinate system rotates with the geometry. Positive angles turn counter-clockwise; the centre is given in sketch coordinates.",
+    "inputSchema": {
+      "properties": {
+        "angle_deg": {
+          "type": "number"
+        },
+        "center_x": {
+          "default": 0,
+          "type": "number"
+        },
+        "center_y": {
+          "default": 0,
+          "type": "number"
+        },
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "sketch": {
+          "type": "string"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities",
+        "angle_deg"
+      ],
+      "type": "object"
+    }
+  },
+  "ruled_surface": {
+    "description": "Create a tangent ruled sheet from one selected sheet-body edge.",
+    "inputSchema": {
+      "properties": {
+        "edge_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "length": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "sheet_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "sheet_index",
+        "edge_index",
+        "length"
+      ],
+      "type": "object"
+    }
+  },
+  "run_analysis": {
+    "description": "Mesh and run the Simulation study of the active part and report the mesh error, node and element counts and the analysis error code.",
+    "inputSchema": {
+      "properties": {
+        "quality": {
+          "description": "Mesh quality: 0 draft, 1 high. Default 1.",
+          "maximum": 1,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "study": {
+          "description": "Study name; defaults to the newest study.",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "save_bodies": {
+    "description": "Save selected visible solids as new linked parts and an assembly. Adds a Save Bodies feature to a clean saved working copy; native SW may save it. Reopens outputs to verify geometry. Paths must be approved and absent; source remains active. One Save Bodies feature per source; no property transfer.",
+    "inputSchema": {
+      "properties": {
+        "assembly_path": {
+          "description": "Absolute new .SLDASM path; required by this workflow.",
+          "type": "string"
+        },
+        "body_indices": {
+          "description": "Fresh visible body_index from get_cut_list_body_map or list_body_edges.",
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "output_paths": {
+          "description": "Absolute new .SLDPRT paths, one per index in the same order.",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "body_indices",
+        "output_paths",
+        "assembly_path"
+      ],
+      "type": "object"
+    }
+  },
+  "save_document": {
+    "description": "Save the active part, assembly or drawing as a native SolidWorks file. Without a path it saves into the first approved output root under 'subfolder', using the document title as the file name. Naming a .sldlfp path saves a part as a weldment profile; any other extension is corrected to the native one. Paths outside the approved output roots are denied.",
+    "inputSchema": {
+      "properties": {
+        "overwrite": {
+          "default": true,
+          "description": "When false, an existing file is reported instead of replaced.",
+          "type": "boolean"
+        },
+        "path": {
+          "description": "Optional full destination path. Without it the file goes to <output_root>/<subfolder>/<title>.<ext>. Use a .sldlfp path to save a part as a weldment profile.",
+          "type": "string"
+        },
+        "subfolder": {
+          "default": "saved",
+          "description": "Folder inside the first output root used when path is omitted.",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "scale_body": {
+    "description": "Uniformly scale one solid body by index about its centroid or the part origin.",
+    "inputSchema": {
+      "properties": {
+        "body_index": {
+          "description": "Zero-based index in the visible solid body list.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "factor": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "origin": {
+          "default": "centroid",
+          "enum": [
+            "centroid",
+            "origin"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "body_index",
+        "factor"
+      ],
+      "type": "object"
+    }
+  },
+  "scale_entities": {
+    "description": "Scale the named sketch entities by a factor. SolidWorks scales about the sketch origin and has no scale centre argument, so the entities also move unless they are centred on the origin.",
+    "inputSchema": {
+      "properties": {
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "factor": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "sketch": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities",
+        "factor"
+      ],
+      "type": "object"
+    }
+  },
+  "select_component_edges": {
+    "description": "Select only edges returned by list_component_edges in this MCP session. Rejects stale document/configuration/part/transform or wrong-instance references. Verifies actual selected edge owners; restores prior selection on failure. No geometry/save or automatic resolve.",
+    "inputSchema": {
+      "properties": {
+        "append": {
+          "default": false,
+          "type": "boolean"
+        },
+        "edge_ids": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "mark": {
+          "default": 0,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "snapshot_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "edge_ids"
+      ],
+      "type": "object"
+    }
+  },
+  "select_component_svg_edges": {
+    "description": "Resolve labels from export_component_edge_svg to the exact native assembly edges in the same MCP session. Checks stale context and exact owner; preserves/rolls back selection through select_component_edges. Never trusts edited SVG/JSON names or coordinates.",
+    "inputSchema": {
+      "properties": {
+        "append": {
+          "default": false,
+          "type": "boolean"
+        },
+        "labels": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "map_id": {
+          "type": "string"
+        },
+        "mark": {
+          "default": 0,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "map_id",
+        "labels"
+      ],
+      "type": "object"
+    }
+  },
+  "set_appearance": {
+    "description": "Set part-level RGB color in the active configuration and read it back.",
+    "inputSchema": {
+      "properties": {
+        "blue": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "green": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "red": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "type": "object"
+    }
+  },
+  "set_component_fixed": {
+    "description": "Fix or float an exact top-level component and verify native state. No save performed.",
+    "inputSchema": {
+      "properties": {
+        "component_name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "fixed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "component_name",
+        "fixed"
+      ],
+      "type": "object"
+    }
+  },
+  "set_component_rotation": {
+    "description": "Set one floating top-level component's absolute rotation as [rx, ry, rz] degrees (Rz*Ry*Rx, right-handed, about the component origin), keeping translation and scale. Requires the expected current rotation (rotation_deg from get_component); reads native transform back. Does not save or repair mates.",
+    "inputSchema": {
+      "properties": {
+        "component_name": {
+          "type": "string"
+        },
+        "expected_rotation_deg": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "rotation_deg": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        }
+      },
+      "required": [
+        "component_name",
+        "rotation_deg",
+        "expected_rotation_deg"
+      ],
+      "type": "object"
+    }
+  },
+  "set_component_translation": {
+    "description": "Set one floating top-level component's absolute translation in millimetres, preserving rotation and scale. Requires expected current translation; reads native transform back. Does not save or repair mates.",
+    "inputSchema": {
+      "properties": {
+        "component_name": {
+          "type": "string"
+        },
+        "expected_translation_mm": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "translation_mm": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        }
+      },
+      "required": [
+        "component_name",
+        "translation_mm",
+        "expected_translation_mm"
+      ],
+      "type": "object"
+    }
+  },
+  "set_custom_property": {
+    "description": "Set a text custom property on the active document, or on one named configuration, and read it back so the stored value is confirmed. Mutating.",
+    "inputSchema": {
+      "properties": {
+        "configuration": {
+          "description": "Optional configuration name. Omit for a document-level property.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Custom property name, for example 'PartNumber'.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "overwrite": {
+          "default": true,
+          "description": "Replace an existing value. When false the property is only added if it is new.",
+          "type": "boolean"
+        },
+        "value": {
+          "description": "Text value to store in the property.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ],
+      "type": "object"
+    }
+  },
+  "set_model_dimension": {
+    "description": "Set one existing driving dimension in the ACTIVE configuration of a verified copy; requires expected old value and explicit units, rebuilds and reads back. Does not save.",
+    "inputSchema": {
+      "properties": {
+        "configuration": {
+          "description": "Expected active configuration",
+          "type": "string"
+        },
+        "edit_original": {
+          "default": false,
+          "description": "Edit the original; path policy still applies",
+          "type": "boolean"
+        },
+        "expected_value": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "unit": {
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "in",
+            "ft",
+            "deg",
+            "rad",
+            "scalar"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "unit",
+        "expected_value",
+        "configuration"
+      ],
+      "type": "object"
+    }
+  },
+  "set_units": {
+    "description": "Set default unit for dimensions.",
+    "inputSchema": {
+      "properties": {
+        "unit": {
+          "description": "Default unit",
+          "enum": [
+            "mm",
+            "inch",
+            "m",
+            "cm"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "unit"
+      ],
+      "type": "object"
+    }
+  },
+  "set_view": {
+    "description": "Set a standard named view on the active document.",
+    "inputSchema": {
+      "properties": {
+        "orientation": {
+          "enum": [
+            "front",
+            "back",
+            "left",
+            "right",
+            "top",
+            "bottom",
+            "isometric",
+            "trimetric",
+            "dimetric"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "orientation"
+      ],
+      "type": "object"
+    }
+  },
+  "shell_feature": {
+    "description": "Shell the active part and optionally remove planar faces identified by indices from list_planar_faces on the current model state.",
+    "inputSchema": {
+      "properties": {
+        "outward": {
+          "default": false,
+          "type": "boolean"
+        },
+        "remove_face_indices": {
+          "default": [],
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "thickness": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "thickness"
+      ],
+      "type": "object"
+    }
+  },
+  "sketch_chamfer": {
+    "description": "Chamfer a sketch corner. Name the two adjacent entities that meet at the corner by their exact sketch segment names. mode is distance_angle (distance plus angle_deg), distance_distance (distance plus distance2) or distance_equal (equal legs of distance). The sketch is reopened for edit and closed again; success is confirmed by an observed geometry change.",
+    "inputSchema": {
+      "properties": {
+        "angle_deg": {
+          "default": 45,
+          "exclusiveMaximum": 90,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "distance": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "distance2": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        },
+        "mode": {
+          "default": "distance_angle",
+          "enum": [
+            "distance_angle",
+            "distance_distance",
+            "distance_equal"
+          ],
+          "type": "string"
+        },
+        "sketch": {
+          "type": "string"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities",
+        "distance"
+      ],
+      "type": "object"
+    }
+  },
+  "sketch_fillet": {
+    "description": "Round a sketch corner with a fillet arc. Name the two adjacent entities that meet at the corner by their exact sketch segment names (for example Line1 and Line2). The sketch is reopened for edit and closed again; success is confirmed by an observed geometry change and earlier entity references may be invalidated.",
+    "inputSchema": {
+      "properties": {
+        "constrained_corners": {
+          "default": true,
+          "type": "boolean"
+        },
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        },
+        "radius": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "sketch": {
+          "type": "string"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities",
+        "radius"
+      ],
+      "type": "object"
+    }
+  },
+  "sketch_mirror": {
+    "description": "Mirror sketch entities about another entity in the same sketch. Name the entities to mirror and the mirror entity (normally an independent centerline) by their exact sketch segment names. The mirror entity is selected last and must not be connected to the entities being mirrored, because SolidWorks silently ignores such a mirror. The sketch is reopened for edit and closed again.",
+    "inputSchema": {
+      "properties": {
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "mirror_entity": {
+          "type": "string"
+        },
+        "sketch": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities",
+        "mirror_entity"
+      ],
+      "type": "object"
+    }
+  },
+  "sketch_pattern_circular": {
+    "description": "Create an equal-spacing circular sketch pattern of the selected entities about centre_x/centre_y, both in the sketch's own 2D coordinate system. The seed is one of the count instances, so the angular step is total_angle_deg/count; use 360 for a full circle. SolidWorks derives its own pattern centre from the seed geometry, so the tool computes and reports the arc radius and angle it passes on.",
+    "inputSchema": {
+      "properties": {
+        "center_x": {
+          "default": 0,
+          "type": "number"
+        },
+        "center_y": {
+          "default": 0,
+          "type": "number"
+        },
+        "count": {
+          "minimum": 2,
+          "type": "integer"
+        },
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "rotate_instances": {
+          "default": false,
+          "type": "boolean"
+        },
+        "sketch": {
+          "type": "string"
+        },
+        "total_angle_deg": {
+          "default": 360,
+          "exclusiveMinimum": 0,
+          "maximum": 360,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities",
+        "count"
+      ],
+      "type": "object"
+    }
+  },
+  "sketch_pattern_linear": {
+    "description": "Create a linear sketch pattern of the selected entities. count_x and count_y are the total instance counts including the seed, so a 2 by 3 pattern creates six instances. spacing_x and spacing_y are the distances between instances; angle_y_deg defaults to 90 so the second direction is perpendicular to the first.",
+    "inputSchema": {
+      "properties": {
+        "angle_x_deg": {
+          "default": 0,
+          "type": "number"
+        },
+        "angle_y_deg": {
+          "default": 90,
+          "type": "number"
+        },
+        "count_x": {
+          "default": 2,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "count_y": {
+          "default": 1,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "sketch": {
+          "type": "string"
+        },
+        "spacing_x": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "spacing_y": {
+          "default": 0,
+          "minimum": 0,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities",
+        "spacing_x"
+      ],
+      "type": "object"
+    }
+  },
+  "split_entities": {
+    "description": "Split one sketch entity in two at points on it. Name the entity by its exact sketch segment name. An open entity takes one split point (x, y); a closed entity such as a circle takes two (x, y and x2, y2). The sketch is reopened for edit and closed again.",
+    "inputSchema": {
+      "properties": {
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "type": "array"
+        },
+        "sketch": {
+          "type": "string"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        },
+        "x": {
+          "type": "number"
+        },
+        "x2": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "y2": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities",
+        "x",
+        "y"
+      ],
+      "type": "object"
+    }
+  },
+  "standard_library_status": {
+    "description": "Report the state of the standard-parts library (path, catalog and size counts, last sync) and print the exact CLI command to rebuild it.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  },
+  "suppress_component": {
+    "description": "Suppress or unsuppress (fully resolve) one exact top-level component and verify the native state. Suppressing keeps the component in the tree so it can be restored. Does not save.",
+    "inputSchema": {
+      "properties": {
+        "component_name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "suppressed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "component_name",
+        "suppressed"
+      ],
+      "type": "object"
+    }
+  },
+  "sweep_cut": {
+    "description": "Sweep one closed profile sketch along one path sketch as a cut through the active part. Use exact sketch feature names.",
+    "inputSchema": {
+      "properties": {
+        "path_sketch": {
+          "type": "string"
+        },
+        "profile_sketch": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "profile_sketch",
+        "path_sketch"
+      ],
+      "type": "object"
+    }
+  },
+  "sweep_sketch": {
+    "description": "Sweep one closed profile sketch along one path sketch on the active part. Use exact sketch feature names and keep the path perpendicular to the profile at its start.",
+    "inputSchema": {
+      "properties": {
+        "path_sketch": {
+          "type": "string"
+        },
+        "profile_sketch": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "profile_sketch",
+        "path_sketch"
+      ],
+      "type": "object"
+    }
+  },
+  "sweep_surface": {
+    "description": "Sweep a 2D profile along a separate path sketch into an open sheet.",
+    "inputSchema": {
+      "properties": {
+        "path_sketch": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "profile_sketch": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "profile_sketch",
+        "path_sketch"
+      ],
+      "type": "object"
+    }
+  },
+  "thicken_surface": {
+    "description": "Make a solid by thickening a planar or extruded surface feature.",
+    "inputSchema": {
+      "properties": {
+        "side": {
+          "default": "one",
+          "enum": [
+            "one",
+            "other",
+            "both"
+          ],
+          "type": "string"
+        },
+        "surface_name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "thickness": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "unit": {
+          "default": "mm",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "surface_name",
+        "thickness"
+      ],
+      "type": "object"
+    }
+  },
+  "toggle_construction": {
+    "description": "Switch the named sketch entities between normal and construction geometry. Pass construction true or false to force one state, or leave it out to flip every named entity.",
+    "inputSchema": {
+      "properties": {
+        "construction": {
+          "type": "boolean"
+        },
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "sketch": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities"
+      ],
+      "type": "object"
+    }
+  },
+  "trim_entities": {
+    "description": "Trim or extend existing entities inside one named sketch. Select entities by their exact sketch segment names (for example Line1, Line2). The sketch is reopened for edit and closed again. Success is confirmed by an observed geometry change. Trimming invalidates previously reported entity references.",
+    "inputSchema": {
+      "properties": {
+        "entities": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "mode": {
+          "default": "corner",
+          "enum": [
+            "closest",
+            "corner",
+            "twoentities",
+            "entitypoint",
+            "outside",
+            "inside"
+          ],
+          "type": "string"
+        },
+        "pick": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "sketch": {
+          "type": "string"
+        },
+        "unit": {
+          "description": "Unit; omitted = session default",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "inch"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "sketch",
+        "entities"
+      ],
+      "type": "object"
+    }
+  },
+  "trim_weldment_members": {
+    "description": "Miter-trim one solid weldment body against another in the active part, with an explicit zero weld gap. Use body names from list_planar_faces.",
+    "inputSchema": {
+      "properties": {
+        "body_to_trim": {
+          "description": "Name of the solid member body to trim",
+          "minLength": 1,
+          "type": "string"
+        },
+        "trimming_body": {
+          "description": "Name of the solid body used as boundary",
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "body_to_trim",
+        "trimming_body"
+      ],
+      "type": "object"
+    }
+  },
+  "undo": {
+    "description": "Request one or more undo steps on the bound active document without saving it.",
+    "inputSchema": {
+      "properties": {
+        "steps": {
+          "default": 1,
+          "description": "Number of SolidWorks history steps to request.",
+          "maximum": 20,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "update_drawing_package": {
+    "description": "Rebuild explicitly related copied drawings, read back sheets and save only on request; exact copy isolation preflight, partial writes reported.",
+    "inputSchema": {
+      "properties": {
+        "document_path": {
+          "type": "string"
+        },
+        "drawing_paths": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "save": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "document_path"
+      ],
+      "type": "object"
+    }
+  },
+  "update_model_equation": {
+    "description": "Update an existing equation RHS after matching its old expression. Preserves LHS, targets active configuration and verifies evaluation/rebuild. Does not save.",
+    "inputSchema": {
+      "properties": {
+        "configuration": {
+          "description": "Expected active configuration",
+          "type": "string"
+        },
+        "edit_original": {
+          "default": false,
+          "description": "Edit the original; path policy still applies",
+          "type": "boolean"
+        },
+        "expected_expression": {
+          "type": "string"
+        },
+        "index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "rhs": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "index",
+        "rhs",
+        "expected_expression",
+        "configuration"
+      ],
+      "type": "object"
+    }
+  },
+  "write_parameter_workspace": {
+    "description": "Edit only the local project register: create project/owner/parameter, save draft or queue a request. Never changes CAD.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "create_project",
+            "add_owner",
+            "add_parameter",
+            "set_draft",
+            "discard_draft",
+            "add_request",
+            "update_request",
+            "queue_cad_job",
+            "cancel_cad_job"
+          ],
+          "type": "string"
+        },
+        "expected_revision": {
+          "description": "Recommended optimistic project revision for all edits in an existing project.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "payload": {
+          "description": "Typed fields for the selected action.",
+          "type": "object"
+        },
+        "project_id": {
+          "description": "Required except when creating a project.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "payload"
+      ],
+      "type": "object"
+    }
+  },
+  "zoom_fit": {
+    "description": "Zoom the active model view to fit its geometry.",
+    "inputSchema": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    }
+  }
+}

@@ -8,6 +8,8 @@ from enum import Enum
 from typing import Union, Tuple
 import logging
 
+from ..core.contracts import QuantityValidationError
+
 logger = logging.getLogger(__name__)
 
 
@@ -89,24 +91,32 @@ class UnitConverter:
     
     def _parse_unit(self, unit: Union[str, Unit]) -> Unit:
         """
-        Parse unit string to Unit enum
-        
+        Parse unit string to Unit enum.
+
         Args:
             unit: Unit string or enum
-        
+
         Returns:
             Unit enum value
+
+        Raises:
+            QuantityValidationError: if the unit is not a known length unit.
+                Silently falling back to millimetres used to turn a typo such as
+                ``unit="furlong"`` into a valid but wrong geometry, so an
+                unknown unit is refused instead.
         """
         if isinstance(unit, Unit):
             return unit
-        
+
         if isinstance(unit, str):
             unit_lower = unit.lower().strip()
             if unit_lower in UNIT_ALIASES:
                 return UNIT_ALIASES[unit_lower]
-        
-        logger.warning(f"Unknown unit '{unit}', using millimeters")
-        return Unit.MILLIMETER
+
+        choices = ", ".join(sorted(UNIT_ALIASES))
+        raise QuantityValidationError(
+            f"Unsupported unit '{unit}'. Supported units: {choices}."
+        )
     
     def to_meters(self, value: float, unit: str = None) -> float:
         """

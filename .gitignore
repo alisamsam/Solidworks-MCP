@@ -6,6 +6,14 @@
 config.local.json
 solidworks_mcp.log
 .env
+# Local agent skills (not part of the product)
+skill/
 dist/
 build/
 *.egg-info/
+
+# Local agent / browser tooling artifacts
+.claude/
+.opencode/
+.playwright-mcp/
+output/

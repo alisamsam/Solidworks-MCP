@@ -23,7 +23,7 @@
 
 ## ✨ Features
 
-- ✅ **22 Tools** covering parts, sketches, features, and utilities
+- ✅ **Extensible tool catalog** covering parts, sketches, features, and utilities; use `get_capabilities` for the current list
 - ✅ **SolidWorks 2023–2025 Compatible** with version-aware API fallbacks
 - ✅ **Auto-detects SolidWorks** installation via Windows registry
 - ✅ **Multi-unit support** — mm, cm, inch, meter, foot
@@ -35,6 +35,26 @@
 ---
 
 ## 🛠️ Available Tools
+
+**Slovenska navodila za uporabnika:** [Kaj lahko naročim in kako začnem](docs/UPORABNISKI-VODIC.md)
+ter [celoten katalog s primerom za vsako orodje](docs/MCP-ORODJA-KATALOG.md).
+Prek MCP: `get_modeling_guide(topic="workflow/tools")`; nato izberi področje.
+Vodiča se preverjata proti dejanskemu registru z `python scripts/build_user_tool_guide.py --check`.
+
+The table below lists core examples, not the complete current catalog.
+Before modeling, use `get_modeling_guide(topic="index")` to select an ordered
+workflow or an expert topic. The same read-only knowledge is available at
+`solidworks://guides/index`. It covers feature order, prerequisite checks,
+verification and currently advertised workflow tools without connecting to CAD.
+See [shared knowledge and verification](solidworks_mcp/knowledge/documentation/integration.md).
+
+A local parameter workspace now shares project owners, drafts, calculations
+and agent requests between the browser and MCP clients. Start it with the
+project Python environment: `python scripts/parameter_workspace.py --open`.
+The tools `read_parameter_workspace` and `write_parameter_workspace` access
+the same persistent register without a CAD connection. This first stage
+does not discover or mutate CAD dimensions; see the
+[current workspace capabilities](solidworks_mcp/knowledge/solidworks-2025-expert/references/parameter-workspace-operations.md).
 
 | Category | Tool | Description |
 |----------|------|-------------|
@@ -192,10 +212,14 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 ---
 
-## 👤 Author
+## 👤 Original author
 
 **Samsaam Ali Baig**
 - GitHub: [@alisamsam](https://github.com/alisamsam)
+
+Additional development on the `additional-upgrades` branch: **PksOck**.
+This branch is being prepared as a consolidated pull request for the original
+author's review; its changes have not been merged upstream.
 
 ---
 
