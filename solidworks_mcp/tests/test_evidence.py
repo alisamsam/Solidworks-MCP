@@ -11,7 +11,7 @@ class EvidenceWriterTests(unittest.TestCase):
     def setUp(self):
         self.tempdir = tempfile.TemporaryDirectory()
         self.output = Path(self.tempdir.name) / "evidence.jsonl"
-        self.protected = Path("C:/Users/Jan/Documents/GrabCAD")
+        self.protected = Path("C:/Users/ExampleUser/Documents/GrabCAD")
 
     def tearDown(self):
         self.tempdir.cleanup()
